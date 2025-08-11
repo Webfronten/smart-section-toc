@@ -1,0 +1,220 @@
+/**
+ * Smart Section TOC - Stylesheet with CSS Variables
+ *
+ * @package SmartSectionTOC
+ * @version 1.1.0
+ */
+
+/* Main TOC container styling */
+.smart-toc-navigation {
+    --toc-bg: #ffffff;
+    --toc-border-color: #333;
+    --toc-text-color: #333;
+    --toc-heading-color: #333;
+    --toc-hover-bg: transparent;
+    --toc-hover-color: inherit;
+    --toc-active-bg: transparent;
+    --toc-active-color: #333;
+    --toc-indicator-color: transparent;
+    --toc-focus-outline: #1e5d9f;
+    --toc-font-size: 20px;
+
+    position: sticky;
+    top: 20px;
+    background: var(--toc-bg);
+    border: 2px solid var(--toc-border-color);
+    border-radius: 14px;
+    padding: 24px 20px 20px 20px;
+    width: 348px;
+    margin-left: 0px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--toc-bg);
+}
+
+/* Webkit scrollbar styling */
+.smart-toc-navigation::-webkit-scrollbar {
+    width: 6px;
+}
+
+.smart-toc-navigation::-webkit-scrollbar-track {
+    background: var(--toc-bg);
+}
+
+.smart-toc-navigation::-webkit-scrollbar-thumb {
+    background: var(--toc-bg);
+    border-radius: 3px;
+}
+
+.smart-toc-navigation::-webkit-scrollbar-thumb:hover {
+    background: var(--toc-bg);
+}
+
+/* TOC heading styling */
+.smart-toc-navigation h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--toc-heading-color);
+}
+
+/* Navigation list reset and styling */
+.smart-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.smart-toc-list li {
+    margin-bottom: 10px;
+}
+
+.smart-toc-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* Link styling with smooth transitions */
+.smart-toc-list a {
+    text-decoration: none;
+    color: var(--toc-text-color);
+    display: block;
+    padding: 8px 8px;
+    padding-left: 0px;
+    transition: all 0.3s ease;
+    font-size: var(--toc-font-size);
+    font-weight: 400;
+    position: relative;
+    line-height: 32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Hover state for better interactivity */
+.smart-toc-list a:hover {
+    background: var(--toc-hover-bg);
+    color: var(--toc-hover-color);
+    text-decoration: none;
+}
+
+/* Active section styling */
+.smart-toc-list a.active {
+    font-weight: 700;
+    background: var(--toc-active-bg);
+    color: var(--toc-active-color);
+}
+
+/* Visual focus indicator for keyboard navigation */
+.smart-toc-list a:focus {
+    outline: 2px solid var(--toc-focus-outline);
+    outline-offset: 2px;
+}
+
+/* Active section indicator */
+.smart-toc-list a.active::before,
+.smart-toc-list a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    border-radius: 2px;
+    background: var(--toc-indicator-color);
+    transition: height 0.3s ease;
+}
+
+.smart-toc-list a.active::before {
+    height: 60%;
+}
+
+.smart-toc-list a::before {
+    height: 0;
+}
+
+/* Print styles */
+@media print {
+    .smart-toc-navigation {
+        display: none;
+    }
+}
+
+/* Tablet and mobile */
+@media (max-width: 1024px) {
+    .smart-toc-navigation {
+        position: sticky;
+        margin: 20px 0;
+        /* max-width: 216px; */
+        max-height: none;
+    }
+    .smart-toc-list a {
+        white-space: normal;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 767px) {
+    .smart-toc-navigation {
+        padding: 15px;
+        border-radius: 6px;
+    }
+
+    .smart-toc-navigation h3 {
+        font-size: 24px;
+        line-height: 32px;
+        margin-bottom: 12px;
+    }
+
+    .smart-toc-list a {
+        font-size: 17px;
+        line-height: 26px;
+        padding: 8px 0px;
+    }
+}
+
+@media (max-width: 589px) {
+    .smart-toc-navigation {
+        padding: 1px;
+        border-radius: 6px;
+        width: 50px;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .smart-toc-navigation {
+        border-width: 2px;
+    }
+
+    .smart-toc-list a:focus {
+        outline-width: 3px;
+    }
+
+    .smart-toc-list a.active {
+        text-decoration: underline;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .smart-toc-list a,
+    .smart-toc-list a::before {
+        transition: none;
+    }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .smart-toc-navigation {
+        --toc-bg: #1e1e1e;
+        --toc-border-color: #444;
+        --toc-heading-color: #f0f0f0;
+        --toc-text-color: #e0e0e0;
+        --toc-hover-bg: #2a2a2a;
+        --toc-hover-color: #fff;
+        --toc-active-bg: #333;
+        --toc-active-color: #fff;
+        --toc-focus-outline: #4db8ff;
+        --toc-indicator-color: #4db8ff;
+    }
+}

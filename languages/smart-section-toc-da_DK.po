@@ -1,0 +1,57 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Section TOC\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-23 10:05+0000\n"
+"PO-Revision-Date: 2025-07-23 10:08+0000\n"
+"Last-Translator: Torben Heikel Vinther\n"
+"Language-Team: Dansk\n"
+"Language: da_DK\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.2.27\n"
+"X-Domain: smart-section-toc"
+
+#. Description of the plugin
+msgid ""
+"Automatically generates a dynamic table of contents from H2 headings with "
+"smooth scrolling and active section highlighting."
+msgstr ""
+"Genererer automatisk en dynamisk indholdsfortegnelse ud fra H2-overskrifter "
+"med jævn rulning og aktiv fremhævelse af afsnit."
+
+#: smart-section-toc.php:146
+msgid "Content on the site"
+msgstr "Indhold på siden"
+
+#: smart-section-toc.php:257
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: smart-section-toc.php:163
+msgid "Dynamically generated via JavaScript"
+msgstr "Dynamisk genereret vi Javascript"
+
+#: smart-section-toc.php:238
+msgid "Go to section:"
+msgstr "Gå til sektion:"
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.webfronten.dk"
+msgstr "https://www.webfronten.dk"
+
+#. Name of the plugin
+msgid "Smart Section TOC"
+msgstr "Smart Section TOC"
+
+#: smart-section-toc.php:162
+msgid "Table of contents"
+msgstr "Indholdsfortegnelse"
+
+#. Author of the plugin
+msgid "Webfronten ApS"
+msgstr "Webfronten ApS"
