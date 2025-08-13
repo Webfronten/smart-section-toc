@@ -1,121 +1,61 @@
-name: Build and attach release ZIP
-
-on:
-  push:
-    tags:
-      - 'v*'        # Tower: v1.2.3
-      - '[0-9]*'    # tillad også 1.2.3 uden v
-  release:
-    types: [published]
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-jobs:
-  build-zip:
-    runs-on: ubuntu-latest
-    env:
-      PLUGIN_SLUG: smart-section-toc
-      MAIN_FILE: smart-section-toc.php
-
-    steps:
-      - name: Checkout (tag/release ref)
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-          fetch-depth: 0
-
-      - name: Setup PHP (for version parsing)
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-
-      - name: Debug refs
-        run: |
-          echo "GITHUB_EVENT_NAME=${GITHUB_EVENT_NAME}"
-          echo "GITHUB_REF=${GITHUB_REF}"
-          echo "GITHUB_SHA=${GITHUB_SHA}"
-          echo "EVENT TAG (if release)=${{ github.event.release.tag_name }}"
-
-      - name: Locate plugin main file and read Version
-        id: ver
-        run: |
-          set -e
-          # Find pluginfilen i repo-roden eller i /slug
-          if [ -f "$MAIN_FILE" ]; then
-            FILE="$MAIN_FILE"
-          elif [ -f "$PLUGIN_SLUG/$MAIN_FILE" ]; then
-            FILE="$PLUGIN_SLUG/$MAIN_FILE"
-          else
-            echo "Could not find $MAIN_FILE in repo root or $PLUGIN_SLUG/"; ls -la; exit 1
-          fi
-          echo "Using file: $FILE"
-          head -n 40 "$FILE" || true
-
-          # Tillad evt. '*' i starten af linjen inde i header-kommentaren:
-          # Eksempler der matches:
-          # "Version: 1.0.5"
-          # "* Version: 1.0.5"
-          VERSION=$(php -r "preg_match('/^\\s*(?:\\*\\s*)?Version:\\s*([^\\r\\n]+)$/mi', file_get_contents('$FILE'), \$m); echo isset(\$m[1]) ? trim(\$m[1]) : '';")
-          if [ -z "$VERSION" ]; then
-            echo \"::error ::No 'Version:' header found in $FILE\"
-            exit 1
-          fi
-          echo \"version=$VERSION\" >> $GITHUB_OUTPUT
-          echo \"Detected plugin version: $VERSION\"
-
-      - name: Determine tag (supports tag push & release)
-        id: tag
-        run: |
-          if [ -n "${{ github.event.release.tag_name }}" ]; then
-            RAW="${{ github.event.release.tag_name }}"
-          else
-            RAW="${GITHUB_REF##*/}"
-          fi
-          echo "Raw tag: $RAW"
-          TAG="${RAW#v}"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-          echo "Normalized tag (no 'v'): $TAG"
-
-      - name: Validate version == tag
-        run: |
-          echo "Version from file: ${{ steps.ver.outputs.version }}"
-          echo "Version from tag : ${{ steps.tag.outputs.tag }}"
-          if [ "${{ steps.ver.outputs.version }}" != "${{ steps.tag.outputs.tag }}" ]; then
-            echo "::error ::Version (${{ steps.ver.outputs.version }}) does not match tag (${{ steps.tag.outputs.tag }})"
-            exit 1
-          fi
-
-      - name: Prepare build folder
-        run: |
-          mkdir -p build/${{ env.PLUGIN_SLUG }}
-          rsync -av \
-            --exclude '.git*' \
-            --exclude '.github' \
-            --exclude '.vscode' \
-            --exclude '.idea' \
-            --exclude 'node_modules' \
-            --exclude 'tests' \
-            --exclude 'build' \
-            --exclude '.DS_Store' \
-            ./ build/${{ env.PLUGIN_SLUG }}
-
-      - name: Create ZIP (root folder == plugin slug)
-        run: |
-          cd build
-          zip -r "${{ env.PLUGIN_SLUG }}.zip" "${{ env.PLUGIN_SLUG }}"
-          echo "ZIP created at build/${{ env.PLUGIN_SLUG }}.zip"
-
-      - name: Upload artifact (optional)
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.PLUGIN_SLUG }}-zip
-          path: build/${{ env.PLUGIN_SLUG }}.zip
-          if-no-files-found: error
-
-      - name: Create or update GitHub Release and attach ZIP
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/${{ env.PLUGIN_SLUG }}.zip
-          generate_release_notes: true
+- name: Locate plugin main file and read Version
+  id: ver
+  run: |
+    set -eo pipefail
+    
+    # 1) Find plugin main file
+    if [ -f "$MAIN_FILE" ]; then
+      FILE="$MAIN_FILE"
+    elif [ -f "$PLUGIN_SLUG/$MAIN_FILE" ]; then
+      FILE="$PLUGIN_SLUG/$MAIN_FILE"
+    else
+      echo "::error::Could not find $MAIN_FILE in repo root or $PLUGIN_SLUG/"
+      echo "Repo root listing:"; ls -la
+      echo "$PLUGIN_SLUG/ listing:"; ls -la "$PLUGIN_SLUG" || true
+      exit 1
+    fi
+    
+    echo "Using file: $FILE"
+    echo "Absolute path: $(realpath "$FILE")"
+    
+    # 2) Debug file content
+    echo "----- First 80 lines of $FILE -----"
+    head -n 80 "$FILE" || true
+    echo "----- All Version: occurrences -----"
+    grep -n -i 'Version:' "$FILE" || echo "No Version: lines found"
+    
+    # 3) Extract version with robust PHP parser
+    VERSION=$(php -r "
+      \$content = file_get_contents('$FILE');
+      if (\$content === false) { 
+        fwrite(STDERR, \"ERROR: Could not read file: $FILE\\n\"); 
+        exit(1); 
+      }
+      
+      // Normalize content: remove BOM, convert NBSP/tabs to spaces, normalize line endings
+      \$content = preg_replace('/^\xEF\xBB\xBF/', '', \$content);
+      \$content = str_replace([\"\xC2\xA0\", \"\t\"], [' ', ' '], \$content);
+      \$content = preg_replace('/\r\n?/', \"\n\", \$content);
+      
+      // Match WordPress plugin version header (with or without * prefix)
+      if (preg_match('/^\s*(?:\*\s*)?Version:\s*([0-9][^\r\n]*?)\s*$/mi', \$content, \$matches)) {
+        echo trim(\$matches[1]);
+      } else {
+        fwrite(STDERR, \"ERROR: No Version header found in $FILE\\n\");
+        exit(1);
+      }
+    " 2>&1)
+    
+    # Check if PHP command succeeded
+    if [ $? -ne 0 ]; then
+      echo "::error::PHP version parsing failed: $VERSION"
+      exit 1
+    fi
+    
+    if [ -z "$VERSION" ]; then
+      echo "::error::Empty version extracted from $FILE"
+      exit 1
+    fi
+    
+    echo "✅ Detected plugin version: $VERSION"
+    echo "version=$VERSION" >> $GITHUB_OUTPUT
