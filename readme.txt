@@ -106,7 +106,20 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.2 - 2025-08-13 =
+* Added: Automatic update support via Plugin Update Checker (PUC) with GitHub Release assets.
+* Added: GitHub Actions workflow to build and attach release ZIPs on tag/release.
+* Improved: Internal structure for update handling; no functional changes for end users.
+
+= 1.0.1 - 2025-08-13 =
+* Initial public GitHub release.
+* Feature: Dynamic table of contents from H2 headings.
+* Feature: Smooth scrolling and active section highlighting.
+* Feature: Translation-ready (textdomain: smart-section-toc).
+* Feature: Shortcode-based output and separate stylesheet using CSS variables.
+* Performance: Lazy asset loading and class-based architecture for lightweight runtime.
+
+= 1.0.0 - 2025-07-22 =
 * Initial release
 * Automatic H2 heading detection
 * Smooth scrolling functionality
