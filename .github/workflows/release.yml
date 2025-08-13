@@ -3,13 +3,14 @@ name: Build and attach release ZIP
 on:
   push:
     tags:
-      - 'v*'               # Kør når du pusher et tag (fx fra Tower Git-Flow)
+      - 'v*'        # Tower: v1.2.3
+      - '[0-9]*'    # (valgfrit) også 1.2.3 uden v, hvis Tower en dag ikke prefixer
   release:
-    types: [published]     # ...eller når du publicerer en release i UI
-  workflow_dispatch:       # Manuel kørsel hvis nødvendigt
+    types: [published]
+  workflow_dispatch:
 
 permissions:
-  contents: write          # Nødvendigt for at oprette/ændre releases og uploade assets
+  contents: write
 
 jobs:
   build-zip:
@@ -19,47 +20,72 @@ jobs:
       MAIN_FILE: smart-section-toc.php
 
     steps:
-      - name: Checkout
+      - name: Checkout (tag or release ref)
         uses: actions/checkout@v4
         with:
+          # Check out præcis den ref der triggere (tag/release)
+          ref: ${{ github.ref }}
           fetch-depth: 0
 
-      - name: Setup PHP
+      - name: Setup PHP (for version parsing)
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
 
-      - name: Determine version & tag
+      - name: Debug refs (what exactly triggered?)
         run: |
+          echo "GITHUB_EVENT_NAME=${GITHUB_EVENT_NAME}"
+          echo "GITHUB_REF=${GITHUB_REF}"
+          echo "GITHUB_SHA=${GITHUB_SHA}"
+          echo "EVENT TAG (if release): ${{ github.event.release.tag_name }}"
+
+      - name: Determine file path and version
+        id: ver
+        run: |
+          set -e
+          # Find plugin main file (root eller i /slug)
           if [ -f "$MAIN_FILE" ]; then
             FILE="$MAIN_FILE"
           elif [ -f "$PLUGIN_SLUG/$MAIN_FILE" ]; then
             FILE="$PLUGIN_SLUG/$MAIN_FILE"
           else
-            echo "Could not find $MAIN_FILE"; exit 1
+            echo "Could not find $MAIN_FILE in repo root or $PLUGIN_SLUG/"; ls -la; exit 1
           fi
+          echo "Using file: $FILE"
+          head -n 30 "$FILE" || true
 
           VERSION=$(php -r "preg_match('/^\\s*Version:\\s*(.+)$/mi', file_get_contents(getenv('FILE')), \$m); echo isset(\$m[1]) ? trim(\$m[1]) : '';")
-          if [ -z "$VERSION" ]; then echo "No Version found in $FILE"; exit 1; fi
-
-          if [ "${GITHUB_REF##*/}" != "" ]; then
-            REF="${GITHUB_REF##*/}"
-            TAG="${REF#v}"
-          elif [ -n "${{ github.event.release.tag_name }}" ]; then
-            TAG="${{ github.event.release.tag_name }}"
-            TAG="${TAG#v}"
-          else
-            echo "No tag found"; exit 1
+          if [ -z "$VERSION" ]; then
+            echo "No 'Version:' header found in $FILE"; exit 1
           fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected plugin version: $VERSION"
 
-          echo "Version: $VERSION / Tag: $TAG"
-          if [ "$VERSION" != "$TAG" ]; then
-            echo "Version ($VERSION) does not match tag ($TAG)"; exit 1
+      - name: Determine tag (supports both push and release)
+        id: tag
+        run: |
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
+            RAW="${{ github.event.release.tag_name }}"
+          else
+            RAW="${GITHUB_REF##*/}"
+          fi
+          echo "Raw tag: $RAW"
+          TAG="${RAW#v}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Normalized tag (no 'v'): $TAG"
+
+      - name: Validate version == tag
+        run: |
+          echo "Version from file: ${{ steps.ver.outputs.version }}"
+          echo "Version from tag : ${{ steps.tag.outputs.tag }}"
+          if [ "${{ steps.ver.outputs.version }}" != "${{ steps.tag.outputs.tag }}" ]; then
+            echo "::error ::Version (${{ steps.ver.outputs.version }}) does not match tag (${{ steps.tag.outputs.tag }})"
+            exit 1
           fi
 
       - name: Prepare build folder
         run: |
-          mkdir -p build/$PLUGIN_SLUG
+          mkdir -p build/${{ env.PLUGIN_SLUG }}
           rsync -av \
             --exclude '.git*' \
             --exclude '.github' \
@@ -69,12 +95,13 @@ jobs:
             --exclude 'tests' \
             --exclude 'build' \
             --exclude '.DS_Store' \
-            ./ build/$PLUGIN_SLUG
+            ./ build/${{ env.PLUGIN_SLUG }}
 
-      - name: Create ZIP
+      - name: Create ZIP (root folder == plugin slug)
         run: |
           cd build
-          zip -r "$PLUGIN_SLUG.zip" "$PLUGIN_SLUG"
+          zip -r "${{ env.PLUGIN_SLUG }}.zip" "${{ env.PLUGIN_SLUG }}"
+          echo "ZIP created at build/${{ env.PLUGIN_SLUG }}.zip"
 
       - name: Upload artifact (optional)
         uses: actions/upload-artifact@v4
