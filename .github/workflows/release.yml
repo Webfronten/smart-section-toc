@@ -1,0 +1,92 @@
+name: Build and attach release ZIP
+
+on:
+  release:
+    types: [published]     # Kører automatisk når du publicerer en release
+  workflow_dispatch:       # Mulighed for manuel kørsel
+  push:
+    tags:
+      - 'v*'               # Byg også ved push af tags (vedhæftes kun hvis eventet er 'release')
+
+permissions:
+  contents: write          # Krævet for at uploade til releases
+
+jobs:
+  build-zip:
+    runs-on: ubuntu-latest
+
+    env:
+      PLUGIN_SLUG: smart-section-toc
+      MAIN_FILE: smart-section-toc.php
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure version matches tag (if tag/release)
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'release'
+        run: |
+          # Find version i plugin-header (root eller i slug-mappe)
+          if [ -f "$MAIN_FILE" ]; then
+            FILE="$MAIN_FILE"
+          elif [ -f "$PLUGIN_SLUG/$MAIN_FILE" ]; then
+            FILE="$PLUGIN_SLUG/$MAIN_FILE"
+          else
+            echo "Could not find $MAIN_FILE in repo root or $PLUGIN_SLUG/"
+            exit 1
+          fi
+
+          VERSION=$(php -r "preg_match('/^\\s*Version:\\s*(.+)$/mi', file_get_contents(getenv('FILE')), \$m); echo isset(\$m[1]) ? trim(\$m[1]) : '';")
+          if [ -z "$VERSION" ]; then
+            echo "Could not read Version from $FILE"
+            exit 1
+          fi
+
+          # Strip refs/tags/ and optional leading v
+          REF="${GITHUB_REF##*/}"
+          TAG="${REF#v}"
+
+          echo "Plugin version: $VERSION"
+          echo "Git tag:       $TAG"
+
+          if [ "$VERSION" != "$TAG" ]; then
+            echo "Version ($VERSION) does not match tag ($TAG)."
+            exit 1
+          fi
+
+      - name: Prepare build folder
+        run: |
+          mkdir -p build/$PLUGIN_SLUG
+
+          # Kopiér ALLE nødvendige filer til slug-mappen i build/
+          # Behold readme.txt og assets; udelad kun typiske dev/CI filer.
+          rsync -av \
+            --exclude '.git*' \
+            --exclude '.github' \
+            --exclude '.vscode' \
+            --exclude '.idea' \
+            --exclude 'node_modules' \
+            --exclude 'tests' \
+            --exclude 'build' \
+            --exclude '.DS_Store' \
+            ./ build/$PLUGIN_SLUG
+
+      - name: Create ZIP
+        run: |
+          cd build
+          zip -r "$PLUGIN_SLUG.zip" "$PLUGIN_SLUG"
+
+      - name: Upload artifact (for debugging / manual download)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PLUGIN_SLUG }}-zip
+          path: build/${{ env.PLUGIN_SLUG }}.zip
+          if-no-files-found: error
+
+      - name: Attach ZIP to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/${{ env.PLUGIN_SLUG }}.zip
