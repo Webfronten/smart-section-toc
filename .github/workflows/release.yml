@@ -60,11 +60,13 @@ jobs:
               fwrite(STDERR, \"ERROR: Could not read file: $FILE\\n\"); 
               exit(1); 
             }
+            // Normalize (BOM, NBSP, tabs, CRLF)
             \$content = preg_replace('/^\xEF\xBB\xBF/', '', \$content);
             \$content = str_replace([\"\xC2\xA0\", \"\t\"], [' ', ' '], \$content);
             \$content = preg_replace('/\r\n?/', \"\n\", \$content);
-            if (preg_match('/^\s*(?:\*\s*)?Version:\s*([0-9][^\r\n]*?)\s*$/mi', \$content, \$matches)) {
-              echo trim(\$matches[1]);
+            // Match 'Version:' with or without '*'
+            if (preg_match('/^\s*(?:\*\s*)?Version:\s*([0-9][^\r\n]*?)\s*$/mi', \$content, \$m)) {
+              echo trim(\$m[1]);
             } else {
               fwrite(STDERR, \"ERROR: No Version header found in $FILE\\n\");
               exit(1);
@@ -108,6 +110,7 @@ jobs:
 
       - name: Prepare build folder
         run: |
+          set -e
           mkdir -p build/${{ env.PLUGIN_SLUG }}
           rsync -av \
             --exclude '.git*' \
