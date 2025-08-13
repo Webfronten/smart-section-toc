@@ -1,0 +1,10 @@
+# macOS Finder
+.DS_Store
+**/.DS_Store
+
+# Node modules
+node_modules/
+
+# IDE-filer
+.idea/
+.vscode/
