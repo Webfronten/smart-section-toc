@@ -106,6 +106,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.9 - 2025-08-13 =
+* Improved: Tower versioning.
+
 = 1.0.8 - 2025-08-13 =
 * Improved: Tower versioning.
 
