@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'v*'        # Tower: v1.2.3
-      - '[0-9]*'    # (valgfrit) også 1.2.3 uden v, hvis Tower en dag ikke prefixer
+      - '[0-9]*'    # tillad også 1.2.3 uden v
   release:
     types: [published]
   workflow_dispatch:
@@ -20,10 +20,9 @@ jobs:
       MAIN_FILE: smart-section-toc.php
 
     steps:
-      - name: Checkout (tag or release ref)
+      - name: Checkout (tag/release ref)
         uses: actions/checkout@v4
         with:
-          # Check out præcis den ref der triggere (tag/release)
           ref: ${{ github.ref }}
           fetch-depth: 0
 
@@ -32,18 +31,18 @@ jobs:
         with:
           php-version: '8.2'
 
-      - name: Debug refs (what exactly triggered?)
+      - name: Debug refs
         run: |
           echo "GITHUB_EVENT_NAME=${GITHUB_EVENT_NAME}"
           echo "GITHUB_REF=${GITHUB_REF}"
           echo "GITHUB_SHA=${GITHUB_SHA}"
-          echo "EVENT TAG (if release): ${{ github.event.release.tag_name }}"
+          echo "EVENT TAG (if release)=${{ github.event.release.tag_name }}"
 
-      - name: Determine file path and version
+      - name: Locate plugin main file and read Version
         id: ver
         run: |
           set -e
-          # Find plugin main file (root eller i /slug)
+          # Find pluginfilen i repo-roden eller i /slug
           if [ -f "$MAIN_FILE" ]; then
             FILE="$MAIN_FILE"
           elif [ -f "$PLUGIN_SLUG/$MAIN_FILE" ]; then
@@ -54,14 +53,17 @@ jobs:
           echo "Using file: $FILE"
           head -n 30 "$FILE" || true
 
-          VERSION=$(php -r "preg_match('/^\\s*Version:\\s*(.+)$/mi', file_get_contents(getenv('FILE')), \$m); echo isset(\$m[1]) ? trim(\$m[1]) : '';")
+          # **VIGTIG FIX**: Interpolér filnavnet direkte ind i PHP-kommandoen,
+          # så vi ikke er afhængige af getenv('FILE').
+          VERSION=$(php -r "preg_match('/^\\s*Version:\\s*(.+)$/mi', file_get_contents('$FILE'), \$m); echo isset(\$m[1]) ? trim(\$m[1]) : '';")
           if [ -z "$VERSION" ]; then
-            echo "No 'Version:' header found in $FILE"; exit 1
+            echo "::error ::No 'Version:' header found in $FILE"
+            exit 1
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Detected plugin version: $VERSION"
 
-      - name: Determine tag (supports both push and release)
+      - name: Determine tag (supports tag push & release)
         id: tag
         run: |
           if [ -n "${{ github.event.release.tag_name }}" ]; then
