@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.6
+ * Version: 1.0.7
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
