@@ -106,6 +106,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.3 - 2025-08-13 =
+* Improved: Tower versioning.
+
 = 1.0.2 - 2025-08-13 =
 * Added: Automatic update support via Plugin Update Checker (PUC) with GitHub Release assets.
 * Added: GitHub Actions workflow to build and attach release ZIPs on tag/release.
