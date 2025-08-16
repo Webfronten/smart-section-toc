@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.9
+ * Version: 1.0.10
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -132,6 +132,9 @@ class Smart_Section_TOC
 
         // Add plugin action links
         add_filter('plugin_action_links_' . SMART_SECTION_TOC_PLUGIN_BASENAME, array($this, 'add_action_links'));
+
+        // Add Admin Menu
+        add_action('admin_menu', array($this, 'add_admin_menu'));
     }
 
     /**
@@ -263,23 +266,82 @@ class Smart_Section_TOC
     }
 
     /**
-     * Add action links to the plugins page
+     * Add admin menu item under Settings
+     */
+    public function add_admin_menu(): void
+    {
+        add_options_page(
+            __('Smart Section TOC Settings', 'smart-section-toc'),
+            __('Smart Section TOC', 'smart-section-toc'),
+            'manage_options',
+            'smart-section-toc',
+            array($this, 'render_settings_page')
+        );
+    }
+
+    /**
+     * Add action links on the plugin list page
      *
-     * Adds helpful links that appear under the plugin name on the
-     * WordPress plugins page for easy access to documentation.
+     * Adds helpful links like "Settings" and "Documentation" below the plugin name
+     * on the WordPress plugins page.
      *
-     * @param array $links Existing plugin action links
-     * @return array Modified array of plugin action links
+     * @param array $links Existing action links.
+     * @return array Modified action links.
      */
     public function add_action_links(array $links): array
     {
         $plugin_links = array(
-            '<a href="https://www.webfronten.dk" target="_blank" rel="noopener noreferrer">' .
-                esc_html__('Documentation', 'smart-section-toc') .
-                '</a>',
+            '<a href="' . esc_url(admin_url('options-general.php?page=smart-section-toc')) . '">' .
+                esc_html__('Settings', 'smart-section-toc') . '</a>',
+            // '<a href="https://www.webfronten.dk" target="_blank" rel="noopener noreferrer">' .
+            //     esc_html__('Documentation', 'smart-section-toc') . '</a>',
         );
 
         return array_merge($plugin_links, $links);
+    }
+
+    /**
+     * Render the plugin's settings/instructions page
+     */
+    public function render_settings_page(): void
+    {
+?>
+        <div class="wrap">
+            <h1><?php _e('Smart Section TOC Instructions', 'smart-section-toc'); ?></h1>
+            <p><?php _e('This plugin automatically generates a table of contents based on the H2 headings inside a selected content area.', 'smart-section-toc'); ?></p>
+
+            <h2><?php _e('Shortcode', 'smart-section-toc'); ?></h2>
+            <p><code>[smart_section_toc]</code></p>
+
+            <h2><?php _e('Content container class', 'smart-section-toc'); ?></h2>
+            <p>
+                <code><?php echo esc_html(apply_filters('smart_section_toc_content_selector', '.site-content')); ?></code><br>
+                <?php _e('This CSS selector determines which part of your content is scanned for headings.', 'smart-section-toc'); ?><br>
+                <?php _e('You can change it using the following filter:', 'smart-section-toc'); ?>
+            </p>
+            <pre><code>add_filter( 'smart_section_toc_content_selector', function() {
+    return '.your-custom-class';
+});</code></pre>
+
+            <h2><?php _e('Heading levels', 'smart-section-toc'); ?></h2>
+            <p>
+                <code><?php echo esc_html(apply_filters('smart_section_toc_heading_selector', 'h2')); ?></code><br>
+                <?php _e('Defines which heading tags are included. Default is H2.', 'smart-section-toc'); ?><br>
+                <?php _e('To include H3 as well, use this filter:', 'smart-section-toc'); ?>
+            </p>
+            <pre><code>add_filter( 'smart_section_toc_heading_selector', function() {
+    return 'h2, h3';
+});</code></pre>
+
+            <h2><?php _e('Need help?', 'smart-section-toc'); ?></h2>
+            <p>
+                <?php printf(
+                    __('Visit the <a href="%s" target="_blank" rel="noopener noreferrer">plugin website</a> for more information.', 'smart-section-toc'),
+                    esc_url('https://www.webfronten.dk')
+                ); ?>
+            </p>
+        </div>
+<?php
     }
 }
 
