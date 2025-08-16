@@ -106,6 +106,11 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.10 - 2025-08-16 =
+* Added admin settings page under "Settings > Smart Section TOC" with usage instructions and shortcode guide
+* Added "Settings" and "Documentation" links on the Plugins page for easier access
+* Improved accessibility markup with support for aria-label on TOC navigation landmark
+
 = 1.0.9 - 2025-08-13 =
 * Improved: Tower versioning.
 
