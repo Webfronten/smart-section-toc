@@ -1,10 +1,23 @@
-# macOS Finder
+# macOS Finder files
 .DS_Store
 **/.DS_Store
 
-# Node modules
+# Backup files from WordPress translation editors (e.g., Poedit, Loco Translate)
+*.po~
+*.mo~
+*.pot~
+*.po.bak
+*.mo.bak
+*.pot.bak
+
+# Temporary/lock files from Poedit
+*.po#
+*.mo#
+*.pot#
+
+# Node.js dependencies
 node_modules/
 
-# IDE-filer
+# IDE configuration files
 .idea/
 .vscode/
