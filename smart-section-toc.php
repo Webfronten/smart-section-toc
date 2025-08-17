@@ -258,6 +258,7 @@ class Smart_Section_TOC
                 'contentSelector' => apply_filters('smart_section_toc_content_selector', '.site-content'),
                 'headingSelector' => apply_filters('smart_section_toc_heading_selector', 'h2'),
                 'scrollOffset' => apply_filters('smart_section_toc_scroll_offset', 80),
+                'minHeadings'     => apply_filters('smart_section_toc_min_headings', 1),
                 'strings' => array(
                     'goToSection' => __('Go to section:', 'smart-section-toc'),
                 ),

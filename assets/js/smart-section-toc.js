@@ -54,11 +54,27 @@
         }
 
         const headings = contentArea.querySelectorAll(settings.headingSelector);
-        if (headings.length === 0) {
+
+        // Respect configured minimum (defaults to 1). Only bail if strictly below it.
+        const min = Number(settings.minHeadings || 1);
+        if (!headings || headings.length < min) {
             console.warn(
-                "Smart Section TOC: No headings found within content area.",
+                "Smart Section TOC: Not enough headings found.",
+                "Found:",
+                headings ? headings.length : 0,
+                "| Min required:",
+                min,
             );
             return;
+        }
+
+        // If we’re here, we have >= 1 headings. Ensure the TOC container is visible.
+        const tocContainer = document.querySelector(".smart-toc-navigation");
+        if (tocContainer) {
+            // Remove any accidental hiding from theme CSS or prior logic.
+            tocContainer.style.display = "";
+            tocContainer.removeAttribute("hidden");
+            tocContainer.classList.remove("is-hidden");
         }
 
         // Also try a global search to see what's available

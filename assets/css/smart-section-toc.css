@@ -218,3 +218,11 @@
         --toc-indicator-color: #4db8ff;
     }
 }
+
+/* Defensive: if at least one item exists, show the TOC */
+.smart-toc-navigation .smart-toc-list li {
+    display: list-item;
+}
+.smart-toc-navigation {
+    display: block;
+}
