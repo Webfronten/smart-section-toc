@@ -453,7 +453,7 @@ function smart_section_toc_intelligent_loading()
         }
     }
 }
-// add_action('wp_enqueue_scripts', 'smart_section_toc_intelligent_loading', 999);
+add_action('wp_enqueue_scripts', 'smart_section_toc_intelligent_loading', 999);
 
 /**
  * Initialize the plugin
