@@ -347,7 +347,7 @@ class Smart_Section_TOC
 
 /**
  * Smart Section TOC - Intelligent Asset Loading
- * Erstatter behovet for functions.php kode
+ * Altid vis TOC når shortcode er til stede, uanset antal headings
  */
 function smart_section_toc_intelligent_loading()
 {
@@ -364,37 +364,41 @@ function smart_section_toc_intelligent_loading()
         strpos($content, 'smart-section-toc') !== false
     );
 
-    // Load assets hvis shortcode findes ELLER 3+ H2 headings
+    // Load assets hvis:
+    // 1. Shortcode findes (uanset antal headings) ELLER
+    // 2. Der er 3+ H2 headings (auto-enable)
     if ($has_shortcode || $h2_count >= 3) {
         wp_enqueue_style(
             'smart-section-toc-css',
             plugins_url('assets/css/smart-section-toc.css', __FILE__),
             array(),
-            '1.0.10'
+            '1.0.11'
         );
 
         wp_enqueue_script(
             'smart-section-toc-js',
             plugins_url('assets/js/smart-section-toc.js', __FILE__),
             array(),
-            '1.0.10',
+            '1.0.11',
             true
         );
 
-        // Settings object
+        // Settings object med info om antal headings
         wp_add_inline_script(
             'smart-section-toc-js',
             'var smartSectionTOC = {
                 "contentSelector": "' . apply_filters('smart_section_toc_content_selector', '.site-content') . '",
                 "headingSelector": "' . apply_filters('smart_section_toc_heading_selector', 'h2') . '",
                 "scrollOffset": "' . apply_filters('smart_section_toc_scroll_offset', '80') . '",
-                "strings": {"goToSection": "Gå til sektion:"}
+                "minHeadings": ' . apply_filters('smart_section_toc_min_headings', '1') . ',
+                "forceShow": ' . ($has_shortcode ? 'true' : 'false') . ',
+                "strings": {"goToSection": "Gå til sektion:", "noHeadings": "Ingen overskrifter fundet"}
             };',
             'before'
         );
 
         // Auto-add TOC container for content-rich pages without shortcode
-        if (!$has_shortcode && $h2_count >= 5) {
+        if (!$has_shortcode && $h2_count >= 3) {
             add_filter('the_content', function ($content) {
                 return '<div class="smart-section-toc"></div>' . $content;
             }, 1);
