@@ -106,6 +106,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.15 - 2025-08-17 =
+* Improved: Always show TOC.
+
 = 1.0.14 - 2025-08-17 =
 * Improved: Always show TOC.
 

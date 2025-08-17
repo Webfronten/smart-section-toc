@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.14
+ * Version: 1.0.15
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -346,8 +346,7 @@ class Smart_Section_TOC
 }
 
 /**
- * Smart Section TOC - Intelligent Asset Loading
- * Altid vis TOC når shortcode er til stede, uanset antal headings
+ * Smart Section TOC - Force vis altid når shortcode er til stede
  */
 function smart_section_toc_intelligent_loading()
 {
@@ -370,30 +369,80 @@ function smart_section_toc_intelligent_loading()
             'smart-section-toc-css',
             plugins_url('assets/css/smart-section-toc.css', __FILE__),
             array(),
-            '1.0.13'  // Kun ændret version nummer
+            '1.0.13'
         );
 
         wp_enqueue_script(
             'smart-section-toc-js',
             plugins_url('assets/js/smart-section-toc.js', __FILE__),
             array(),
-            '1.0.13',  // Kun ændret version nummer
+            '1.0.13',
             true
         );
 
-        // Settings object med info om antal headings
+        // Settings object - FORCE vis hvis shortcode er til stede
         wp_add_inline_script(
             'smart-section-toc-js',
             'var smartSectionTOC = {
                 "contentSelector": "' . apply_filters('smart_section_toc_content_selector', '.site-content') . '",
                 "headingSelector": "' . apply_filters('smart_section_toc_heading_selector', 'h2') . '",
                 "scrollOffset": "' . apply_filters('smart_section_toc_scroll_offset', '80') . '",
-                "minHeadings": ' . apply_filters('smart_section_toc_min_headings', '1') . ',
-                "forceShow": ' . ($has_shortcode ? 'true' : 'false') . ',
+                "minHeadings": 1,
+                "forceShow": true,
+                "hasShortcode": ' . ($has_shortcode ? 'true' : 'false') . ',
                 "strings": {"goToSection": "Gå til sektion:", "noHeadings": "Ingen overskrifter fundet"}
             };',
             'before'
         );
+
+        // KRITISK: Force JavaScript override
+        if ($has_shortcode) {
+            wp_add_inline_script(
+                'smart-section-toc-js',
+                '
+                // Override TOC generation efter DOM load
+                document.addEventListener("DOMContentLoaded", function() {
+                    setTimeout(function() {
+                        var tocContainer = document.querySelector(".smart-section-toc");
+                        if (tocContainer && (!tocContainer.innerHTML || tocContainer.innerHTML.trim() === "")) {
+                            console.log("Smart TOC: Forcing TOC generation for shortcode");
+
+                            // Find headings
+                            var siteContent = document.querySelector(".site-content") || document.body;
+                            var headings = siteContent.querySelectorAll("h2");
+
+                            console.log("Smart TOC: Found " + headings.length + " headings");
+
+                            if (headings.length >= 1) {
+                                // Generate TOC selv med få headings
+                                var tocHTML = "<nav class=\"smart-toc-nav\" aria-label=\"Table of Contents\">";
+                                tocHTML += "<h3 class=\"smart-toc-title\">Table of Contents</h3>";
+                                tocHTML += "<ul class=\"smart-toc-list\">";
+
+                                headings.forEach(function(heading, index) {
+                                    if (!heading.id) {
+                                        heading.id = "heading-" + index;
+                                    }
+                                    tocHTML += "<li class=\"smart-toc-item\">";
+                                    tocHTML += "<a href=\"#" + heading.id + "\" class=\"smart-toc-link\">" + heading.textContent + "</a>";
+                                    tocHTML += "</li>";
+                                });
+
+                                tocHTML += "</ul></nav>";
+                                tocContainer.innerHTML = tocHTML;
+
+                                console.log("Smart TOC: Generated TOC with " + headings.length + " items");
+                            } else {
+                                tocContainer.innerHTML = "<p>Ingen H2 overskrifter fundet</p>";
+                                console.log("Smart TOC: No headings found, showing message");
+                            }
+                        }
+                    }, 200);
+                });
+                ',
+                'after'
+            );
+        }
 
         // Auto-add TOC container for content-rich pages without shortcode
         if (!$has_shortcode && $h2_count >= 3) {
