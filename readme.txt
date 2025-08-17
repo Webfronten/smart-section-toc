@@ -106,6 +106,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.12 - 2025-08-17 =
+* Improved: Always show TOC.
+
 = 1.0.11 - 2025-08-17 =
 * Added: Intelligent asset loading system for improved performance and reliability
 * Added: Automatic TOC detection for content-rich pages (3+ H2 headings)
