@@ -52,7 +52,7 @@ if ($api) {
  * Using constants ensures consistency and makes future updates easier
  * when paths or versions need to be changed.
  */
-define('SMART_SECTION_TOC_VERSION', '1.0.0');
+define('SMART_SECTION_TOC_VERSION', '1.0.18');
 define('SMART_SECTION_TOC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SMART_SECTION_TOC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SMART_SECTION_TOC_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -453,7 +453,7 @@ function smart_section_toc_intelligent_loading()
         }
     }
 }
-add_action('wp_enqueue_scripts', 'smart_section_toc_intelligent_loading', 999);
+// add_action('wp_enqueue_scripts', 'smart_section_toc_intelligent_loading', 999);
 
 /**
  * Initialize the plugin
