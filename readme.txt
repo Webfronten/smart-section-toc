@@ -106,6 +106,18 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.11 - 2025-08-17 =
+* Added: Intelligent asset loading system for improved performance and reliability
+* Added: Automatic TOC detection for content-rich pages (3+ H2 headings)
+* Added: Auto-injection of TOC container for pages with 5+ headings
+* Added: Enhanced shortcode detection with multiple fallback methods
+* Added: WordPress filter support for content selector, heading selector, and scroll offset
+* Fixed: Asset loading inconsistencies between identical content pages
+* Fixed: TOC not appearing on duplicated/copied pages
+* Fixed: Page builder compatibility issues
+* Improved: Plugin reliability and edge case handling
+* Improved: Performance by loading assets only when needed
+
 = 1.0.10 - 2025-08-16 =
 * Added admin settings page under "Settings > Smart Section TOC" with usage instructions and shortcode guide
 * Added "Settings" and "Documentation" links on the Plugins page for easier access
