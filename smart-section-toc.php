@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.15
+ * Version: 1.0.16
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -258,6 +258,7 @@ class Smart_Section_TOC
                 'contentSelector' => apply_filters('smart_section_toc_content_selector', '.site-content'),
                 'headingSelector' => apply_filters('smart_section_toc_heading_selector', 'h2'),
                 'scrollOffset' => apply_filters('smart_section_toc_scroll_offset', 80),
+                'minHeadings'     => apply_filters('smart_section_toc_min_headings', 1),
                 'strings' => array(
                     'goToSection' => __('Go to section:', 'smart-section-toc'),
                 ),
