@@ -346,8 +346,7 @@ class Smart_Section_TOC
 }
 
 /**
- * Smart Section TOC - Intelligent Asset Loading
- * Altid vis TOC når shortcode er til stede, uanset antal headings
+ * Smart Section TOC - Kun aktiv med shortcode, vis altid uanset antal headings
  */
 function smart_section_toc_intelligent_loading()
 {
@@ -357,52 +356,42 @@ function smart_section_toc_intelligent_loading()
     if (!$post) return;
 
     $content = $post->post_content;
-    $h2_count = substr_count($content, '<h2');
     $has_shortcode = (
         has_shortcode($content, 'smart_section_toc') ||
         strpos($content, '[smart_section_toc]') !== false ||
         strpos($content, 'smart-section-toc') !== false
     );
 
-    // Load assets hvis:
-    // 1. Shortcode findes (uanset antal headings) ELLER
-    // 2. Der er 3+ H2 headings (auto-enable)
-    if ($has_shortcode || $h2_count >= 3) {
+    // Load assets KUN hvis shortcode findes
+    if ($has_shortcode) {
         wp_enqueue_style(
             'smart-section-toc-css',
             plugins_url('assets/css/smart-section-toc.css', __FILE__),
             array(),
-            '1.0.11'
+            '1.0.13'
         );
 
         wp_enqueue_script(
             'smart-section-toc-js',
             plugins_url('assets/js/smart-section-toc.js', __FILE__),
             array(),
-            '1.0.11',
+            '1.0.13',
             true
         );
 
-        // Settings object med info om antal headings
+        // Settings object - altid vis uanset antal headings
         wp_add_inline_script(
             'smart-section-toc-js',
             'var smartSectionTOC = {
                 "contentSelector": "' . apply_filters('smart_section_toc_content_selector', '.site-content') . '",
                 "headingSelector": "' . apply_filters('smart_section_toc_heading_selector', 'h2') . '",
                 "scrollOffset": "' . apply_filters('smart_section_toc_scroll_offset', '80') . '",
-                "minHeadings": ' . apply_filters('smart_section_toc_min_headings', '1') . ',
-                "forceShow": ' . ($has_shortcode ? 'true' : 'false') . ',
+                "minHeadings": 1,
+                "forceShow": true,
                 "strings": {"goToSection": "Gå til sektion:", "noHeadings": "Ingen overskrifter fundet"}
             };',
             'before'
         );
-
-        // Auto-add TOC container for content-rich pages without shortcode
-        if (!$has_shortcode && $h2_count >= 3) {
-            add_filter('the_content', function ($content) {
-                return '<div class="smart-section-toc"></div>' . $content;
-            }, 1);
-        }
     }
 }
 add_action('wp_enqueue_scripts', 'smart_section_toc_intelligent_loading', 999);
