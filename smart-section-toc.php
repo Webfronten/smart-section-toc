@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.10
+ * Version: 1.0.11
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -344,6 +344,64 @@ class Smart_Section_TOC
 <?php
     }
 }
+
+/**
+ * Smart Section TOC - Intelligent Asset Loading
+ * Erstatter behovet for functions.php kode
+ */
+function smart_section_toc_intelligent_loading()
+{
+    if (is_admin()) return;
+
+    global $post;
+    if (!$post) return;
+
+    $content = $post->post_content;
+    $h2_count = substr_count($content, '<h2');
+    $has_shortcode = (
+        has_shortcode($content, 'smart_section_toc') ||
+        strpos($content, '[smart_section_toc]') !== false ||
+        strpos($content, 'smart-section-toc') !== false
+    );
+
+    // Load assets hvis shortcode findes ELLER 3+ H2 headings
+    if ($has_shortcode || $h2_count >= 3) {
+        wp_enqueue_style(
+            'smart-section-toc-css',
+            plugins_url('assets/css/smart-section-toc.css', __FILE__),
+            array(),
+            '1.0.10'
+        );
+
+        wp_enqueue_script(
+            'smart-section-toc-js',
+            plugins_url('assets/js/smart-section-toc.js', __FILE__),
+            array(),
+            '1.0.10',
+            true
+        );
+
+        // Settings object
+        wp_add_inline_script(
+            'smart-section-toc-js',
+            'var smartSectionTOC = {
+                "contentSelector": "' . apply_filters('smart_section_toc_content_selector', '.site-content') . '",
+                "headingSelector": "' . apply_filters('smart_section_toc_heading_selector', 'h2') . '",
+                "scrollOffset": "' . apply_filters('smart_section_toc_scroll_offset', '80') . '",
+                "strings": {"goToSection": "Gå til sektion:"}
+            };',
+            'before'
+        );
+
+        // Auto-add TOC container for content-rich pages without shortcode
+        if (!$has_shortcode && $h2_count >= 5) {
+            add_filter('the_content', function ($content) {
+                return '<div class="smart-section-toc"></div>' . $content;
+            }, 1);
+        }
+    }
+}
+add_action('wp_enqueue_scripts', 'smart_section_toc_intelligent_loading', 999);
 
 /**
  * Initialize the plugin
