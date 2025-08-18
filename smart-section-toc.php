@@ -364,8 +364,8 @@ function smart_section_toc_intelligent_loading()
         strpos($content, 'smart-section-toc') !== false
     );
 
-    // Load assets hvis shortcode findes ELLER 3+ H2 headings
-    if ($has_shortcode || $h2_count >= 3) {
+    // Load assets if shortcode is present OR 1 or more H2 headings
+    if ($has_shortcode || $h2_count >= 1) {
         wp_enqueue_style(
             'smart-section-toc-css',
             plugins_url('assets/css/smart-section-toc.css', __FILE__),
@@ -446,7 +446,7 @@ function smart_section_toc_intelligent_loading()
         }
 
         // Auto-add TOC container for content-rich pages without shortcode
-        if (!$has_shortcode && $h2_count >= 3) {
+        if (!$has_shortcode && $h2_count >= 1) {
             add_filter('the_content', function ($content) {
                 return '<div class="smart-section-toc"></div>' . $content;
             }, 1);
