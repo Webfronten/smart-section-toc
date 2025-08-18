@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.19
+ * Version: 1.0.20
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -52,7 +52,7 @@ if ($api) {
  * Using constants ensures consistency and makes future updates easier
  * when paths or versions need to be changed.
  */
-define('SMART_SECTION_TOC_VERSION', '1.0.19');
+define('SMART_SECTION_TOC_VERSION', '1.0.20');
 define('SMART_SECTION_TOC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SMART_SECTION_TOC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SMART_SECTION_TOC_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -364,20 +364,20 @@ function smart_section_toc_intelligent_loading()
         strpos($content, 'smart-section-toc') !== false
     );
 
-    // Load assets hvis shortcode findes ELLER 3+ H2 headings
-    if ($has_shortcode || $h2_count >= 3) {
+    // Load assets if shortcode is present OR 1 or more H2 headings
+    if ($has_shortcode || $h2_count >= 1) {
         wp_enqueue_style(
             'smart-section-toc-css',
             plugins_url('assets/css/smart-section-toc.css', __FILE__),
             array(),
-            '1.0.13'
+            '1.0.20'
         );
 
         wp_enqueue_script(
             'smart-section-toc-js',
             plugins_url('assets/js/smart-section-toc.js', __FILE__),
             array(),
-            '1.0.13',
+            '1.0.20',
             true
         );
 
@@ -446,7 +446,7 @@ function smart_section_toc_intelligent_loading()
         }
 
         // Auto-add TOC container for content-rich pages without shortcode
-        if (!$has_shortcode && $h2_count >= 3) {
+        if (!$has_shortcode && $h2_count >= 1) {
             add_filter('the_content', function ($content) {
                 return '<div class="smart-section-toc"></div>' . $content;
             }, 1);
