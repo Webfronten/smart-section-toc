@@ -106,6 +106,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.20 - 2025-08-18 =
+* Improved: Show TOC when there are 1 or more h2 tags.
+
 = 1.0.19 - 2025-08-17 =
 * Improved: Always show TOC.
 
