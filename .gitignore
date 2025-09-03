@@ -1,4 +1,4 @@
-# macOS Finder files
+# Ignore Mac files
 .DS_Store
 **/.DS_Store
 
@@ -14,6 +14,33 @@
 *.po#
 *.mo#
 *.pot#
+
+# ignore all files starting with . or ~
+.*
+~*
+
+# ignore log files and databases
+*.log
+*.sql
+*.sqlite
+
+# ignore compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# ignore packaged files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
 
 # Node.js dependencies
 node_modules/
