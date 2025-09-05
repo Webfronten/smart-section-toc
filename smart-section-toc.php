@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.20
+ * Version: 1.0.21
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -22,29 +22,23 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-// Load Plugin Update Checker library.
+// Plugin Update Checker (GitHub)
 require plugin_dir_path(__FILE__) . 'includes/plugin-update-checker/plugin-update-checker.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-// Create the update checker for this plugin.
-$sstocUpdateChecker = PucFactory::buildUpdateChecker(
-    'https://github.com/Webfronten/smart-section-toc/', // GitHub repo URL
-    __FILE__,                                           // This plugin's main file
-    'smart-section-toc'                                 // Plugin slug (folder name)
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+    'https://github.com/Webfronten/smart-section-toc/',
+    __FILE__,
+    'smart-section-toc'
 );
 
-// Point to the branch with stable code.
-$sstocUpdateChecker->setBranch('main');
+$myUpdateChecker->setBranch('main');
 
-// Prefer Release Assets (so we control the ZIP structure).
-$api = $sstocUpdateChecker->getVcsApi();
+$api = $myUpdateChecker->getVcsApi();
 if ($api) {
     $api->enableReleaseAssets();
 }
-
-// If the repo were private, we would authenticate like this:
-// $sstocUpdateChecker->setAuthentication( 'ghp_xxx' );
 
 /**
  * Define plugin constants for easy reference throughout the plugin
