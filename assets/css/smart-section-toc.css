@@ -25,12 +25,10 @@
     border: 0px solid var(--toc-border-color);
     border-radius: 14px;
     padding: 24px 20px 20px 20px;
-    width: 348px;
     margin-left: 0px;
     max-height: calc(100vh - 100px);
+    max-width: 100%;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--toc-bg);
 }
 
 /* Webkit scrollbar styling */
@@ -144,7 +142,7 @@
     .smart-toc-navigation {
         position: sticky;
         margin: 20px 0;
-        /* max-width: 216px; */
+        max-width: 100%;
         max-height: none;
     }
     .smart-toc-list a {
