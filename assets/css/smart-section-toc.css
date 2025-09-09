@@ -80,7 +80,7 @@
     padding-left: 0px;
     transition: all 0.3s ease;
     font-size: var(--toc-font-size);
-    font-weight: 400;
+    font-weight: 350;
     position: relative;
     line-height: 32px;
     overflow: hidden;
@@ -141,20 +141,10 @@
 @media (max-width: 1024px) {
     .smart-toc-navigation {
         position: sticky;
+        padding: 15px;
         margin: 20px 0;
         max-width: 100%;
         max-height: none;
-    }
-    .smart-toc-list a {
-        white-space: normal;
-    }
-}
-
-/* Small mobile */
-@media (max-width: 767px) {
-    .smart-toc-navigation {
-        padding: 15px;
-        border-radius: 6px;
     }
 
     .smart-toc-navigation h3 {
@@ -165,8 +155,16 @@
 
     .smart-toc-list a {
         font-size: 17px;
+        white-space: normal;
         line-height: 26px;
         padding: 8px 0px;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 767px) {
+    .smart-toc-navigation {
+        border-radius: 6px;
     }
 }
 
