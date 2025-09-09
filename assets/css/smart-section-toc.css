@@ -141,6 +141,7 @@
 @media (max-width: 1024px) {
     .smart-toc-navigation {
         position: sticky;
+        padding: 15px;
         margin: 20px 0;
         max-width: 100%;
         max-height: none;
@@ -155,19 +156,15 @@
     .smart-toc-list a {
         font-size: 17px;
         white-space: normal;
+        line-height: 26px;
+        padding: 8px 0px;
     }
 }
 
 /* Small mobile */
 @media (max-width: 767px) {
     .smart-toc-navigation {
-        padding: 15px;
         border-radius: 6px;
-    }
-
-    .smart-toc-list a {
-        line-height: 26px;
-        padding: 8px 0px;
     }
 }
 
