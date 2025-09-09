@@ -145,7 +145,15 @@
         max-width: 100%;
         max-height: none;
     }
+
+    .smart-toc-navigation h3 {
+        font-size: 24px;
+        line-height: 32px;
+        margin-bottom: 12px;
+    }
+
     .smart-toc-list a {
+        font-size: 17px;
         white-space: normal;
     }
 }
@@ -157,14 +165,7 @@
         border-radius: 6px;
     }
 
-    .smart-toc-navigation h3 {
-        font-size: 24px;
-        line-height: 32px;
-        margin-bottom: 12px;
-    }
-
     .smart-toc-list a {
-        font-size: 17px;
         line-height: 26px;
         padding: 8px 0px;
     }
