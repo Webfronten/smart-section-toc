@@ -171,16 +171,27 @@ class Smart_Section_TOC
         // Build the TOC HTML structure with proper accessibility attributes
         $output = sprintf(
             '<div class="%s">
-                <h3>%s</h3>
-                <nav id="smart-article-toc" aria-label="%s">
-                    <ul class="smart-toc-list" role="list"></ul>
-                </nav>
-            </div>',
+        <h3>%s</h3>
+
+        <button class="smart-toc-toggle"
+                type="button"
+                aria-label="%s"
+                aria-controls="smart-article-toc"
+                aria-expanded="false">
+            <span aria-hidden="true" class="smart-toc-toggle__dot"></span>
+            <span aria-hidden="true" class="smart-toc-toggle__dot"></span>
+            <span aria-hidden="true" class="smart-toc-toggle__dot"></span>
+        </button>
+
+        <nav id="smart-article-toc" aria-label="%s">
+            <ul class="smart-toc-list" role="list"></ul>
+        </nav>
+    </div>',
             esc_attr($atts['container_class']),
             esc_html($atts['title']),
-            esc_attr($atts['title']) // Use same text for aria-label
+            esc_attr__('Open table of contents', 'smart-section-toc'),
+            esc_attr($atts['title']) // Keep ARIA label equal to visible title
         );
-
         return $output;
     }
 

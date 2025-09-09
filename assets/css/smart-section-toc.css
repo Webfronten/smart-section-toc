@@ -5,6 +5,27 @@
  * @version 1.1.0
  */
 
+/* Toggle is hidden by default (desktop/tablet) */
+.smart-toc-toggle {
+    display: none;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Visual dots inside the toggle button */
+.smart-toc-toggle__dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin: 0 3px;
+    border-radius: 50%;
+    background: #333;
+}
+
 /* Main TOC container styling */
 .smart-toc-navigation {
     --toc-bg: transparent;
@@ -169,10 +190,48 @@
 }
 
 @media (max-width: 589px) {
+    /* Container bliver til “dot-indicator” */
     .smart-toc-navigation {
-        padding: 1px;
-        border-radius: 6px;
-        width: 50px;
+        /* DINE KRAV */
+        border-radius: 10px 0 0 10px;
+        border-top: 2px solid #333;
+        border-bottom: 2px solid #333;
+        border-left: 2px solid #333;
+        background: #fff;
+
+        /* Layout/placering – bevar sticky som default */
+        position: sticky;
+        top: 20px;
+
+        /* Kompakt “pille”-form langs højre side */
+        width: 56px;
+        padding: 8px 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Skjul titel og liste/indhold på mobil (indtil der klikkes – kommer senere) */
+    .smart-toc-navigation > h3,
+    .smart-toc-navigation > nav {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0 0 0 0) !important;
+        white-space: nowrap !important; /* a11y-friendly “visually hidden” teknik */
+        border: 0 !important;
+    }
+
+    /* Vis 3-dots-knappen på mobil */
+    .smart-toc-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 36px;
     }
 }
 
