@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.23
+ * Version: 1.0.24
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -46,7 +46,7 @@ if ($api) {
  * Using constants ensures consistency and makes future updates easier
  * when paths or versions need to be changed.
  */
-define('SMART_SECTION_TOC_VERSION', '1.0.22');
+define('SMART_SECTION_TOC_VERSION', '1.0.24');
 define('SMART_SECTION_TOC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SMART_SECTION_TOC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('SMART_SECTION_TOC_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -172,15 +172,26 @@ class Smart_Section_TOC
         $output = sprintf(
             '<div class="%s">
                 <h3>%s</h3>
+
+                <button class="smart-toc-toggle"
+                        type="button"
+                        aria-label="%s"
+                        aria-controls="smart-article-toc"
+                        aria-expanded="false">
+                    <span aria-hidden="true" class="smart-toc-toggle__dot"></span>
+                    <span aria-hidden="true" class="smart-toc-toggle__dot"></span>
+                    <span aria-hidden="true" class="smart-toc-toggle__dot"></span>
+                </button>
+
                 <nav id="smart-article-toc" aria-label="%s">
                     <ul class="smart-toc-list" role="list"></ul>
                 </nav>
             </div>',
             esc_attr($atts['container_class']),
             esc_html($atts['title']),
-            esc_attr($atts['title']) // Use same text for aria-label
+            esc_attr__('Open table of contents', 'smart-section-toc'),
+            esc_attr($atts['title']) // Keep ARIA label equal to visible title
         );
-
         return $output;
     }
 
