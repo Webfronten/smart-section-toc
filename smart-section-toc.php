@@ -186,13 +186,13 @@ class Smart_Section_TOC
         <!-- Popup til mobil -->
         <div class="smart-toc-popup" role="dialog" aria-modal="true" aria-label="%2$s">
             <h3>%2$s</h3>
-            <nav id="smart-article-toc" aria-label="%2$s">
+            <nav id="smart-article-toc-mobile" aria-label="%2$s">
                 <ul class="smart-toc-list" role="list"></ul>
             </nav>
         </div>
 
         <!-- Normal desktop navigation -->
-        <nav id="smart-article-toc" aria-label="%2$s">
+        <nav id="smart-article-toc-desktop" aria-label="%2$s">
             <ul class="smart-toc-list" role="list"></ul>
         </nav>
     </div>',

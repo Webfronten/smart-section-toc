@@ -242,19 +242,21 @@
 
     /* Popup container */
     .smart-toc-popup {
-        position: fixed;
-        top: 20px;
+        position: absolute;
+        top: 100%; /* popup starter lige under toggle */
         left: 20px;
-        right: 45px; /* så toggle-knappen stadig er synlig */
-        bottom: 20px;
+        right: 45px; /* så toggle stadig er synlig */
         background: #fff;
         border: 2px solid #333;
         border-radius: 14px;
         padding: 20px;
         overflow-y: auto;
         z-index: 9998;
-
-        display: none; /* skjult som default */
+        height: fit-content; /* kun så høj som indholdet kræver */
+        max-height: calc(
+            100vh - 40px
+        ); /* sikkerhed: fyld aldrig mere end viewport */
+        display: none; /* skjult indtil JS toggler .is-visible */
     }
 
     .smart-toc-popup.is-visible {
