@@ -24,6 +24,11 @@
     background: #333;
 }
 
+/* Popup (desktop/tablet): altid skjult */
+.smart-toc-popup {
+    display: none;
+}
+
 /* Main TOC container styling */
 .smart-toc-navigation {
     --toc-bg: transparent;
