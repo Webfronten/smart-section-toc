@@ -367,28 +367,60 @@
         }
 
         /**
-         * Mobile toggle: show/hide TOC on small screens
-         * - Expects a button with class .smart-toc-toggle
-         * - Toggles .toc-visible on the wrapper .smart-toc-navigation-wrapper
+         * Mobile toggle: show/hide TOC as popup on small screens
          */
         (function initTOCToggle() {
-            const wrapper = document.querySelector(
-                ".smart-toc-navigation-wrapper",
-            );
+            const wrapper = document.querySelector(".smart-toc-navigation");
             const toggleBtn = document.querySelector(".smart-toc-toggle");
-            if (!wrapper || !toggleBtn) return;
+            const popup = document.querySelector(".smart-toc-popup");
+            if (!wrapper || !toggleBtn || !popup) return;
 
             // Initial ARIA state
             toggleBtn.setAttribute("aria-expanded", "false");
             toggleBtn.setAttribute("aria-controls", "smart-article-toc");
 
+            function openPopup() {
+                popup.classList.add("is-visible");
+                toggleBtn.setAttribute("aria-expanded", "true");
+                document.body.classList.add("smart-toc-open");
+
+                // Luk på klik udenfor
+                document.addEventListener("click", handleOutsideClick);
+                // Luk på ESC
+                document.addEventListener("keydown", handleEscKey);
+            }
+
+            function closePopup() {
+                popup.classList.remove("is-visible");
+                toggleBtn.setAttribute("aria-expanded", "false");
+                document.body.classList.remove("smart-toc-open");
+
+                document.removeEventListener("click", handleOutsideClick);
+                document.removeEventListener("keydown", handleEscKey);
+            }
+
+            function handleOutsideClick(e) {
+                if (
+                    !popup.contains(e.target) &&
+                    !toggleBtn.contains(e.target)
+                ) {
+                    closePopup();
+                }
+            }
+
+            function handleEscKey(e) {
+                if (e.key === "Escape") {
+                    closePopup();
+                }
+            }
+
             toggleBtn.addEventListener("click", function (e) {
                 e.preventDefault();
-                const nowVisible = wrapper.classList.toggle("toc-visible");
-                toggleBtn.setAttribute(
-                    "aria-expanded",
-                    nowVisible ? "true" : "false",
-                );
+                if (popup.classList.contains("is-visible")) {
+                    closePopup();
+                } else {
+                    openPopup();
+                }
             });
         })();
     }
