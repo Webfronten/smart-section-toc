@@ -315,3 +315,31 @@
 .smart-toc-navigation {
     display: block;
 }
+
+/* --- FIX: sticky toggle på mobil --- */
+@media (max-width: 589px) {
+    /* 1) Lad containeren IKKE være flex og IKKE være en scroll-container */
+    .smart-toc-navigation {
+        display: block; /* var flex; ophæv centreringslogik */
+        overflow: visible !important; /* ophæv overflow-y:auto */
+        max-height: none !important; /* så den ikke laver intern scrolling */
+
+        /* bevar din pille-styling + sticky på containeren hvis du vil */
+        position: sticky;
+        top: 20px;
+        width: 56px;
+        padding: 0;
+    }
+
+    /* 2) Gør selve knappen sticky i viewporten */
+    .smart-toc-toggle {
+        position: sticky;
+        top: 20px;
+        z-index: 1001;
+        display: inline-flex;
+
+        /* horizontal centrering i den 56px brede pille */
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
