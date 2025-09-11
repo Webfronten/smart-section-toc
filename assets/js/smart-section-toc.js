@@ -152,7 +152,25 @@
                 e.preventDefault();
                 const targetId = this.getAttribute("href").substring(1);
                 const targetElement = document.getElementById(targetId);
-                if (targetElement) smoothScrollTo(targetElement, this);
+                if (targetElement) {
+                    smoothScrollTo(targetElement, this);
+                }
+
+                // Luk popup hvis linket blev klikket inde i popup'en
+                const popup = document.querySelector(".smart-toc-popup");
+                if (
+                    popup &&
+                    popup.classList.contains("is-visible") &&
+                    popup.contains(this)
+                ) {
+                    popup.classList.remove("is-visible");
+                    document.body.classList.remove("smart-toc-open");
+                    const toggleBtn =
+                        document.querySelector(".smart-toc-toggle");
+                    if (toggleBtn) {
+                        toggleBtn.setAttribute("aria-expanded", "false");
+                    }
+                }
             });
         });
 
