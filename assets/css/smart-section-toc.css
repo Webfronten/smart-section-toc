@@ -193,76 +193,59 @@
 }
 
 @media (max-width: 589px) {
-    /* Container bliver til “dot-indicator” */
+    /* Neutral container – ikke sticky længere */
     .smart-toc-navigation {
-        border-radius: 10px 0 0 10px;
-        border-top: 2px solid #333;
-        border-bottom: 2px solid #333;
-        border-left: 2px solid #333;
-        background: #fff;
-
-        /* Layout/placering – bevar sticky som default */
-        position: sticky;
-        top: 20px;
-
-        /* Kompakt “pille”-form langs højre side */
-        width: 56px;
-        padding: 0px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        position: static;
+        width: auto;
+        padding: 0;
+        background: transparent;
+        border: 0;
     }
 
-    /* Skjul titel og liste/indhold på mobil (indtil der klikkes – kommer senere) */
-    .smart-toc-navigation > h3,
-    .smart-toc-navigation > nav {
-        position: absolute !important;
-        width: 1px !important;
-        height: 1px !important;
-        padding: 0 !important;
-        margin: -1px !important;
-        overflow: hidden !important;
-        clip: rect(0 0 0 0) !important;
-        white-space: nowrap !important; /* a11y-friendly “visually hidden” teknik */
-        border: 0 !important;
-    }
-
-    /* Vis 3-dots-knappen på mobil */
+    /* Fast placeret toggle-knap ude i højre side */
     .smart-toc-toggle {
+        position: fixed;
+        top: 40px;
+        right: 0;
+        z-index: 1001;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 21px 16px; /* efter oplægget */
-        gap: 3px; /* afstand mellem dots */
-        width: auto; /* så knappen kun fylder sit indhold */
-        background: transparent;
-        border: none;
+        padding: 21px 16px;
+        gap: 3px;
+        width: auto;
+
+        background: #fff;
+        border: 2px solid #333;
+        border-right: none; /* så den smelter sammen med popup */
+        border-radius: 10px 0 0 10px;
         cursor: pointer;
     }
 
-    /* Popup container */
+    /* Popup placeres til venstre for knappen */
     .smart-toc-popup {
         position: fixed;
-        top: 20px; /* 20px fra toppen af viewport */
-        left: 20px; /* margin venstre */
-        right: 45px; /* så toggle stadig er synlig */
-        bottom: 20px; /* lidt luft i bunden */
+        top: 40px;
+        right: 46px; /* 46px ≈ knapbredden */
+        bottom: 20px;
+        left: 20px;
+
         background: #fff;
         border: 2px solid #333;
         border-radius: 14px;
         padding: 20px;
         overflow-y: auto;
-        z-index: 9998;
-        height: fit-content;
-        max-height: calc(100vh - 40px); /* så den ikke stikker ud */
-        display: none; /* skjult som default */
+        z-index: 1000;
+        height: auto;
+        max-height: calc(100vh - 60px); /* 40px top + 20px margin bund */
+        display: none;
     }
 
     .smart-toc-popup.is-visible {
         display: block;
     }
 
-    /* Skjul navigation i selve .smart-toc-navigation på mobil */
+    /* Skjul navigation i selve containeren på mobil */
     .smart-toc-navigation > h3,
     .smart-toc-navigation > nav {
         display: none !important;
