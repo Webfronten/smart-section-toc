@@ -4,7 +4,7 @@ Donate link: https://www.webfronten.dk
 Tags: table of contents, toc, navigation, smooth scroll, accessibility
 Requires at least: 6.8
 Tested up to: 6.7
-Version: 1.0.33
+Version: 1.0.34
 Stable tag: 1.0.0
 Requires PHP: 8.2
 License: GPLv2 or later
