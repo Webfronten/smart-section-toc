@@ -109,7 +109,7 @@
     line-height: 32px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
 }
 
 /* Hover state for better interactivity */
