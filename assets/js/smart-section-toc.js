@@ -156,6 +156,13 @@
                 const targetId = this.getAttribute("href").substring(1);
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
+                    ignoreObserver = true;
+                    if (observerUnlockTimeout)
+                        clearTimeout(observerUnlockTimeout);
+                    observerUnlockTimeout = setTimeout(() => {
+                        ignoreObserver = false;
+                    }, 1000); // 1000ms = long enough for scroll to settle
+
                     smoothScrollTo(targetElement, this);
                     setActiveLinksById(targetId);
                 }
@@ -179,6 +186,8 @@
         });
 
         // Scroll-aktiv link (IntersectionObserver hvis muligt)
+        let ignoreObserver = false;
+        let observerUnlockTimeout = null;
         const useScrollFallback = headings.length > 100;
         if (!useScrollFallback && "IntersectionObserver" in window) {
             const observerOptions = {
@@ -197,7 +206,7 @@
                             activeHeading = entry.target;
                         }
                     });
-                    if (activeHeading) {
+                    if (!ignoreObserver && activeHeading) {
                         setActiveLinksById(activeHeading.id);
                     }
                 }, 10);
