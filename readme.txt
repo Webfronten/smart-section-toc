@@ -107,6 +107,10 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.35 - 2025-10-06 =
+* Fixed an issue where clicking a TOC link higher up on the page caused the wrong link to remain active until clicked again.
+* Added temporary lock to IntersectionObserver during smooth scroll so the clicked link stays highlighted until scrolling completes.
+
 = 1.0.21 - 2025-09-05 =
 * Improved: Edit style.
 
