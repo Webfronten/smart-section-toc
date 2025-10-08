@@ -329,3 +329,31 @@
 .smart-toc-navigation {
     display: block;
 }
+
+/* Sørg for at popup arver samme tema som navigation */
+.smart-toc-popup {
+    --toc-bg: #fff;
+    --toc-border-color: #333;
+    --toc-heading-color: #333;
+    --toc-text-color: #333;
+    --toc-hover-bg: transparent;
+    --toc-hover-color: #143e6a;
+    --toc-active-bg: transparent;
+    --toc-active-color: #143e6a;
+    --toc-indicator-color: transparent;
+    --toc-focus-outline: #1e5d9f;
+}
+
+/* Style links i popup */
+.smart-toc-popup a {
+    color: var(--toc-text-color);
+}
+
+.smart-toc-popup a:hover {
+    color: var(--toc-hover-color);
+}
+
+.smart-toc-popup a.active {
+    color: var(--toc-active-color);
+    font-weight: 700;
+}
