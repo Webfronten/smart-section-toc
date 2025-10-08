@@ -78,7 +78,7 @@
     font-size: 28px;
     font-weight: 700;
     color: var(--toc-heading-color);
-    padding-bottom: 0.5em; /* or e.g. 8px */
+    padding-bottom: 1em;
     border-bottom: 1px solid #ccd3dd;
 }
 
