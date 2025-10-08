@@ -4,7 +4,7 @@ Donate link: https://www.webfronten.dk
 Tags: table of contents, toc, navigation, smooth scroll, accessibility
 Requires at least: 6.8
 Tested up to: 6.7
-Version: 1.0.34
+Version: 1.0.36
 Stable tag: 1.0.0
 Requires PHP: 8.2
 License: GPLv2 or later
@@ -106,6 +106,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 5. Accessibility features in action
 
 == Changelog ==
+
+= 1.0.36 - 2025-10-08 =
+* Added divider between TOC-links.
 
 = 1.0.35 - 2025-10-06 =
 * Fixed an issue where clicking a TOC link higher up on the page caused the wrong link to remain active until clicked again.
