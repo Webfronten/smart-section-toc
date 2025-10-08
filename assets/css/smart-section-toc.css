@@ -19,9 +19,13 @@
 /* Visual dots inside the toggle button */
 .smart-toc-toggle__dot {
     display: inline-block;
-    width: 2px;
-    height: 2px;
-    background: #333;
+    width: 3px;
+    height: 3px;
+    background-color: #b83b2b;
+}
+
+.smart-toc-toggle:active .smart-toc-toggle__dot {
+    background-color: #143e6a;
 }
 
 /* Popup (desktop/tablet): altid skjult */
@@ -222,11 +226,31 @@
         gap: 3px;
         width: auto;
 
-        background: #fff;
-        border: 2px solid #333;
+        background: #ffffff;
+        border: 2px solid #b83b2b;
         border-right: none; /* så den smelter sammen med popup */
         border-radius: 10px 0 0 10px;
         cursor: pointer;
+    }
+
+    .smart-toc-toggle:active {
+        background-color: #ffffff;
+        border: 2px solid #143e6a;
+        border-right: none; /* så den smelter sammen med popup */
+    }
+
+    .smart-toc-toggle[aria-expanded="true"] {
+        background-color: #ffffff;
+        border: 2px solid #143e6a;
+        border-right: none; /* så den smelter sammen med popup */
+    }
+
+    .smart-toc-toggle[aria-expanded="true"] .smart-toc-toggle__dot {
+        background-color: #143e6a;
+    }
+    .smart-toc-toggle:hover,
+    .smart-toc-toggle:focus {
+        background-color: #ffffff;
     }
 
     /* Popup placeres til venstre for knappen */
@@ -238,7 +262,7 @@
         left: 20px;
 
         background: #fff;
-        border: 2px solid #333;
+        border: 2px solid #143e6a;
         border-radius: 14px;
         padding: 20px;
         overflow-y: auto;
