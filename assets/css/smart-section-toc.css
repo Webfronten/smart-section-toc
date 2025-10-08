@@ -41,7 +41,7 @@
     --toc-active-color: #333;
     --toc-indicator-color: transparent;
     --toc-focus-outline: #1e5d9f;
-    --toc-font-size: 20px;
+    --toc-font-size: 19px;
 
     position: sticky;
     top: 20px;
@@ -78,6 +78,8 @@
     font-size: 28px;
     font-weight: 700;
     color: var(--toc-heading-color);
+    padding-bottom: 0.5em; /* or e.g. 8px */
+    border-bottom: 1px solid #ccd3dd;
 }
 
 /* Navigation list reset and styling */
@@ -93,6 +95,11 @@
 
 .smart-toc-list li:last-child {
     margin-bottom: 0;
+}
+
+.smart-toc-list li:not(:last-child) {
+    border-bottom: 1px solid #ccd3dd;
+    margin-bottom: 0px;
 }
 
 /* Link styling with smooth transitions */
