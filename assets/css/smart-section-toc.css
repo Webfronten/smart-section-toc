@@ -109,7 +109,7 @@
 /* Link styling with smooth transitions */
 .smart-toc-list a {
     text-decoration: none;
-    color: var(--toc-text-color);
+    color: var(--toc-text-color) !important;
     display: block;
     padding: 8px 8px;
     padding-left: 0px;
