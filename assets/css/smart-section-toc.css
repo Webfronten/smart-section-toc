@@ -55,7 +55,7 @@
     padding: 24px 20px 20px 20px;
     margin-left: 0px;
     max-height: calc(100vh - 100px);
-    max-width: 100%;
+    max-width: 348px;
     overflow-y: auto;
 }
 
