@@ -107,6 +107,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 
 == Changelog ==
 
+= 1.0.42 - 2025-11-20 =
+* Change width of navigation.
+
 = 1.0.41 - 2025-10-21 =
 * Change width of navigation.
 

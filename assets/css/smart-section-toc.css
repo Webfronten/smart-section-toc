@@ -45,7 +45,7 @@
     --toc-active-color: #333;
     --toc-indicator-color: transparent;
     --toc-focus-outline: #1e5d9f;
-    --toc-font-size: 19px;
+    --toc-font-size: 20px;
 
     position: sticky;
     top: 20px;
@@ -127,7 +127,7 @@
 .smart-toc-list a:hover {
     background: var(--toc-hover-bg);
     color: var(--toc-hover-color);
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 /* Active section styling */
