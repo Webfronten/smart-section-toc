@@ -270,6 +270,10 @@
         background: #ffffff;
     }
 
+    .smart-toc-inline-toggle {
+        -webkit-tap-highlight-color: transparent;
+    }
+
     .smart-toc-inline-toggle__label {
         flex: 1;
         text-align: left;
@@ -279,36 +283,22 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 4px;
-        width: 22px;
-        min-width: 22px;
+        gap: 0;
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        background: transparent
+            url("../smart-toc-open.svg?ver=1") center center / 24px 24px
+            no-repeat;
     }
 
     .smart-toc-inline-toggle__icon span {
-        display: block;
-        width: 22px;
-        height: 3px;
-        background: #333;
-        border-radius: 999px;
-        transition: transform 0.2s ease, opacity 0.2s ease;
+        display: none;
     }
 
     .smart-toc-inline-toggle[aria-expanded="true"]
-        .smart-toc-inline-toggle__icon
-        span:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
-    }
-
-    .smart-toc-inline-toggle[aria-expanded="true"]
-        .smart-toc-inline-toggle__icon
-        span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .smart-toc-inline-toggle[aria-expanded="true"]
-        .smart-toc-inline-toggle__icon
-        span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
+        .smart-toc-inline-toggle__icon {
+        background-image: url("../smart-toc-close.svg?ver=1");
     }
 
     .smart-toc-popup.is-visible {
