@@ -21,6 +21,8 @@
             strings: { goToSection: "Go to section:" },
         };
 
+        const popupCloseMap = new WeakMap();
+
         // Find ALLE lister (.smart-toc-list) – én til desktop, én til popup
         const tocLists = document.querySelectorAll(".smart-toc-list");
         if (!tocLists.length) return;
@@ -168,18 +170,20 @@
                 }
 
                 // Luk popup hvis linket blev klikket inde i popup'en
-                const popup = document.querySelector(".smart-toc-popup");
-                if (
-                    popup &&
-                    popup.classList.contains("is-visible") &&
-                    popup.contains(this)
-                ) {
-                    popup.classList.remove("is-visible");
-                    document.body.classList.remove("smart-toc-open");
-                    const toggleBtn =
-                        document.querySelector(".smart-toc-toggle");
-                    if (toggleBtn) {
-                        toggleBtn.setAttribute("aria-expanded", "false");
+                const popup = this.closest(".smart-toc-popup");
+                if (popup && popup.classList.contains("is-visible")) {
+                    const closePopup = popupCloseMap.get(popup);
+                    if (typeof closePopup === "function") {
+                        closePopup();
+                    } else {
+                        popup.classList.remove("is-visible");
+                        document.body.classList.remove("smart-toc-open");
+                        const toggleBtn =
+                            popup.closest(".smart-toc-navigation")?.querySelector(".smart-toc-toggle") ||
+                            popup.closest(".smart-toc-inline")?.querySelector(".smart-toc-inline-toggle");
+                        if (toggleBtn) {
+                            toggleBtn.setAttribute("aria-expanded", "false");
+                        }
                     }
                 }
             });
@@ -279,54 +283,79 @@
             if (hashId) setActiveLinksById(hashId);
         }
 
-        // Popup toggle (mobil)
-        (function initTOCToggle() {
-            const toggleBtn = document.querySelector(".smart-toc-toggle");
-            const popup = document.querySelector(".smart-toc-popup");
-            if (!toggleBtn || !popup) return;
+        // Popup toggle (mobil + inline)
+        function initPopupToggles() {
+            const toggles = document.querySelectorAll(
+                ".smart-toc-toggle, .smart-toc-inline-toggle",
+            );
 
-            toggleBtn.setAttribute("aria-expanded", "false");
-            toggleBtn.setAttribute("aria-controls", "smart-article-toc-mobile");
+            toggles.forEach((toggleBtn) => {
+                const popup =
+                    toggleBtn
+                        .closest(".smart-toc-inline")
+                        ?.querySelector(".smart-toc-popup") ||
+                    toggleBtn
+                        .closest(".smart-toc-navigation")
+                        ?.querySelector(".smart-toc-popup");
+                if (!toggleBtn || !popup) return;
 
-            function openPopup() {
-                popup.classList.add("is-visible");
-                toggleBtn.setAttribute("aria-expanded", "true");
-                document.body.classList.add("smart-toc-open");
-                document.addEventListener("click", handleOutsideClick);
-                document.addEventListener("keydown", handleEscKey);
-            }
-            function closePopup() {
-                popup.classList.remove("is-visible");
+                const nav = popup.querySelector("nav[id]");
+                if (nav && nav.id) {
+                    toggleBtn.setAttribute("aria-controls", nav.id);
+                }
+
                 toggleBtn.setAttribute("aria-expanded", "false");
-                document.body.classList.remove("smart-toc-open");
-                document.removeEventListener("click", handleOutsideClick);
-                document.removeEventListener("keydown", handleEscKey);
-            }
-            function handleOutsideClick(e) {
-                if (!popup.contains(e.target) && !toggleBtn.contains(e.target))
-                    closePopup();
-            }
-            function handleEscKey(e) {
-                if (e.key === "Escape") closePopup();
-            }
-            toggleBtn.addEventListener("click", function (e) {
-                e.preventDefault();
-                popup.classList.contains("is-visible")
-                    ? closePopup()
-                    : openPopup();
+
+                const handleOutsideClick = (e) => {
+                    if (
+                        !popup.contains(e.target) &&
+                        !toggleBtn.contains(e.target)
+                    ) {
+                        closePopup();
+                    }
+                };
+
+                const handleEscKey = (e) => {
+                    if (e.key === "Escape") closePopup();
+                };
+
+                const openPopup = () => {
+                    popup.classList.add("is-visible");
+                    toggleBtn.setAttribute("aria-expanded", "true");
+                    document.body.classList.add("smart-toc-open");
+                    document.addEventListener("click", handleOutsideClick);
+                    document.addEventListener("keydown", handleEscKey);
+                };
+
+                const closePopup = () => {
+                    popup.classList.remove("is-visible");
+                    toggleBtn.setAttribute("aria-expanded", "false");
+                    document.body.classList.remove("smart-toc-open");
+                    document.removeEventListener("click", handleOutsideClick);
+                    document.removeEventListener("keydown", handleEscKey);
+                };
+
+                popupCloseMap.set(popup, closePopup);
+
+                toggleBtn.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    popup.classList.contains("is-visible")
+                        ? closePopup()
+                        : openPopup();
+                });
             });
-        })();
+        }
+
+        initPopupToggles();
     }
 
     function init() {
         initSmartSectionTOC();
-        const toggleButton = document.querySelector(".smart-toc-toggle");
-        if (
-            toggleButton &&
-            !document.querySelector(".smart-toc-popup.is-visible")
-        ) {
-            toggleButton.setAttribute("aria-expanded", "false");
-        }
+        document
+            .querySelectorAll(".smart-toc-toggle, .smart-toc-inline-toggle")
+            .forEach((button) =>
+                button.setAttribute("aria-expanded", "false"),
+            );
     }
 
     if (document.readyState === "loading") {
