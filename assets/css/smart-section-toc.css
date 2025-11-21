@@ -320,12 +320,7 @@
     }
 
     .smart-toc-popup--inline h3 {
-        margin: 0 0 12px 0;
-        padding: 0 0 10px 0;
-        font-size: 22px;
-        font-weight: 700;
-        color: #333;
-        border-bottom: 2px solid #143e6a;
+        display: none; /* avoid duplicate title; button label is the visible title */
     }
 
     .smart-toc-popup--inline nav {
