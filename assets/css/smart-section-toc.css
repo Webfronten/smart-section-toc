@@ -203,6 +203,10 @@
     }
 }
 
+.smart-toc-inline {
+    display: none;
+}
+
 @media (max-width: 589px) {
     /* Neutral container – ikke sticky længere */
     .smart-toc-navigation {
@@ -213,67 +217,124 @@
         border: 0;
     }
 
-    /* Fast placeret toggle-knap ude i højre side */
-    .smart-toc-toggle {
-        position: fixed;
-        top: 40px;
-        right: 0;
-        z-index: 1001;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 21px 16px;
-        gap: 3px;
+    /* Hide legacy fixed toggle in favor of inline button */
+    .smart-toc-navigation .smart-toc-toggle {
+        display: none !important;
+    }
+
+    button.smart-toc-inline-toggle {
+        background-color: #ffffff;
+        color: #333333;
+    }
+
+    /* Mobile inline toggle placed inside content */
+    .smart-toc-inline {
+        display: block;
         width: auto;
-
-        background: #ffffff;
-        border: 2px solid #b83b2b;
-        border-right: none; /* så den smelter sammen med popup */
-        border-radius: 10px 0 0 10px;
-        cursor: pointer;
-    }
-
-    .smart-toc-toggle:active {
-        background-color: #ffffff;
-        border: 2px solid #143e6a;
-        border-right: none; /* så den smelter sammen med popup */
-    }
-
-    .smart-toc-toggle[aria-expanded="true"] {
-        background-color: #ffffff;
-        border: 2px solid #143e6a;
-        border-right: none; /* så den smelter sammen med popup */
-    }
-
-    .smart-toc-toggle[aria-expanded="true"] .smart-toc-toggle__dot {
-        background-color: #143e6a;
-    }
-    .smart-toc-toggle:hover,
-    .smart-toc-toggle:focus {
-        background-color: #ffffff;
-    }
-
-    /* Popup placeres til venstre for knappen */
-    .smart-toc-popup {
-        position: fixed;
+        margin: 0 20px;
+        position: sticky;
         top: 40px;
-        right: 46px; /* 46px ≈ knapbredden */
-        bottom: 20px;
-        left: 20px;
-
-        background: #fff;
-        border: 2px solid #143e6a;
-        border-radius: 14px;
-        padding: 20px;
-        overflow-y: auto;
         z-index: 1000;
-        height: auto;
-        max-height: calc(100vh - 60px); /* 40px top + 20px margin bund */
+        border: 3px solid #143e6a;
+        border-radius: 16px;
+        background: #ffffff;
+        overflow: hidden;
+        /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); */
+    }
+
+    .smart-toc-inline-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 12px;
+        background: #ffffff;
+        color: #333;
+        border: 3px solid #333;
+        border-radius: 14px;
+        padding: 16px 18px;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.3;
+        cursor: pointer;
+        transition: color 0.2s ease, background-color 0.2s ease;
+        margin: 0;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .smart-toc-inline-toggle:active,
+    .smart-toc-inline-toggle:focus {
+        outline: none;
+        background: #ffffff;
+    }
+
+    .smart-toc-inline-toggle {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .smart-toc-inline-toggle__label {
+        flex: 1;
+        text-align: left;
+    }
+
+    .smart-toc-inline-toggle__icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0;
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        background: transparent
+            url("../smart-toc-open.svg?ver=1") center center / 24px 24px
+            no-repeat;
+    }
+
+    .smart-toc-inline-toggle__icon span {
         display: none;
+    }
+
+    .smart-toc-inline-toggle[aria-expanded="true"]
+        .smart-toc-inline-toggle__icon {
+        background-image: url("../smart-toc-close.svg?ver=1");
     }
 
     .smart-toc-popup.is-visible {
         display: block;
+    }
+
+    /* Inline popup drops below button */
+    .smart-toc-popup--inline {
+        position: static;
+        display: none;
+        margin-top: 0;
+        background: #fff;
+        border: 0;
+        border-top: 2px solid #143e6a;
+        border-radius: 0;
+        padding: 18px 16px 20px;
+        box-shadow: none;
+        max-height: none;
+    }
+
+    .smart-toc-popup--inline.is-visible {
+        display: block;
+    }
+
+    .smart-toc-popup--inline h3 {
+        display: none; /* avoid duplicate title; button label is the visible title */
+    }
+
+    .smart-toc-popup--inline nav {
+        display: block;
+    }
+
+    .smart-toc-popup--inline .smart-toc-list a {
+        padding-left: 0;
+        padding-right: 0;
+        line-height: 30px;
     }
 
     /* Skjul navigation i selve containeren på mobil */
