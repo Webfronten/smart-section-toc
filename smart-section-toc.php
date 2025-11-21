@@ -4,7 +4,7 @@
  * Plugin Name: Smart Section TOC
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
- * Version: 1.0.43
+ * Version: 1.0.44
  * Requires at least: 6.8
  * Requires PHP: 8.2
  * Author: Webfronten ApS
@@ -120,6 +120,7 @@ class Smart_Section_TOC
 
         // Register the shortcode
         add_shortcode('smart_section_toc', array($this, 'render_shortcode'));
+        add_shortcode('smart_section_toc_mobile_button', array($this, 'render_mobile_toggle_shortcode'));
 
         // Enqueue assets only when needed
         add_action('wp_enqueue_scripts', array($this, 'maybe_enqueue_assets'));
@@ -201,6 +202,54 @@ class Smart_Section_TOC
             esc_attr__('Open table of contents', 'smart-section-toc')
         );
         return $output;
+    }
+
+    /**
+     * Render a mobile-only inline toggle button + popup container
+     *
+     * Use with [smart_section_toc_mobile_button] to place the button inside content.
+     *
+     * @param array $atts Shortcode attributes.
+     * @return string HTML output for the inline mobile toggle.
+     */
+    public function render_mobile_toggle_shortcode($atts): string
+    {
+        $this->enqueue_assets = true;
+
+        $defaults = array(
+            'title' => __('Content on the site', 'smart-section-toc'),
+            'container_class' => 'smart-toc-inline',
+        );
+
+        $atts = shortcode_atts($defaults, $atts, 'smart_section_toc_mobile_button');
+
+        $nav_id = esc_attr(wp_unique_id('smart-article-toc-mobile-inline-'));
+        $label_text = $atts['title'];
+        $label_attr = esc_attr($label_text);
+        $label = esc_html($label_text);
+
+        return sprintf(
+            '<div class="%1$s" data-smart-toc-inline="true">
+                <button class="smart-toc-inline-toggle" type="button" aria-label="%4$s" aria-controls="%3$s" aria-expanded="false">
+                    <span class="smart-toc-inline-toggle__label">%2$s</span>
+                    <span class="smart-toc-inline-toggle__icon" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+                <div class="smart-toc-popup smart-toc-popup--inline" role="dialog" aria-modal="true" aria-label="%4$s">
+                    <h3>%2$s</h3>
+                    <nav id="%3$s" aria-label="%4$s">
+                        <ul class="smart-toc-list" role="list"></ul>
+                    </nav>
+                </div>
+            </div>',
+            esc_attr($atts['container_class']),
+            $label,
+            $nav_id,
+            $label_attr
+        );
     }
 
     /**
@@ -371,10 +420,15 @@ function smart_section_toc_intelligent_loading()
 
     $content = $post->post_content;
     $h2_count = substr_count($content, '<h2');
+    $has_mobile_button = (
+        has_shortcode($content, 'smart_section_toc_mobile_button') ||
+        strpos($content, '[smart_section_toc_mobile_button]') !== false
+    );
     $has_shortcode = (
         has_shortcode($content, 'smart_section_toc') ||
         strpos($content, '[smart_section_toc]') !== false ||
-        strpos($content, 'smart-section-toc') !== false
+        strpos($content, 'smart-section-toc') !== false ||
+        $has_mobile_button
     );
 
     // Load assets if shortcode is present OR 1 or more H2 headings
