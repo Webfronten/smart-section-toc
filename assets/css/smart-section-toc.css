@@ -231,7 +231,7 @@
     .smart-toc-inline {
         display: block;
         width: auto;
-        margin: 0 20px;
+        margin: 20px 20px 0 20px;
         position: sticky;
         top: 40px;
         z-index: 1000;
@@ -287,9 +287,8 @@
         width: 24px;
         min-width: 24px;
         height: 24px;
-        background: transparent
-            url("../smart-toc-open.svg?ver=1") center center / 24px 24px
-            no-repeat;
+        background: transparent url("../smart-toc-open.svg?ver=1") center center /
+            24px 24px no-repeat;
     }
 
     .smart-toc-inline-toggle__icon span {
