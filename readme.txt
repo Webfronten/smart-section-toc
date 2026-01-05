@@ -4,7 +4,7 @@ Donate link: https://www.webfronten.dk
 Tags: table of contents, toc, navigation, smooth scroll, accessibility
 Requires at least: 6.8
 Tested up to: 6.7
-Version: 1.0.47
+Version: 1.0.48
 Stable tag: 1.0.0
 Requires PHP: 8.2
 License: GPLv2 or later
@@ -106,6 +106,9 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 5. Accessibility features in action
 
 == Changelog ==
+
+= 1.0.48 - 2026-01-05 =
+* Edit function getScrollOffset.
 
 = 1.0.47 - 2025-12-19 =
 * Change position of mobile smart navigation.

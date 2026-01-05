@@ -77,6 +77,15 @@
 
         // Scroll offset (sticky header højde + ekstra padding)
         function getScrollOffset() {
+            // 1) CSS override (highest priority)
+            const cssVar = getComputedStyle(document.documentElement)
+                .getPropertyValue("--smart-toc-scroll-offset")
+                .trim();
+
+            const fromCss = parseInt(cssVar, 10);
+            if (!Number.isNaN(fromCss)) return fromCss;
+
+            // 2) Auto-detect sticky header
             const stickySelectors = [
                 ".site-header",
                 ".header-sticky",
@@ -85,18 +94,18 @@
                 "#masthead.sticky",
                 "header.fixed",
             ];
+
             for (const selector of stickySelectors) {
                 const header = document.querySelector(selector);
-                if (header) {
-                    const style = window.getComputedStyle(header);
-                    if (
-                        style.position === "fixed" ||
-                        style.position === "sticky"
-                    ) {
-                        return header.offsetHeight + 20;
-                    }
+                if (!header) continue;
+
+                const style = window.getComputedStyle(header);
+                if (style.position === "fixed" || style.position === "sticky") {
+                    return header.offsetHeight + 20;
                 }
             }
+
+            // 3) Fallback to setting
             return parseInt(settings.scrollOffset, 10) || 80;
         }
 
@@ -179,8 +188,12 @@
                         popup.classList.remove("is-visible");
                         document.body.classList.remove("smart-toc-open");
                         const toggleBtn =
-                            popup.closest(".smart-toc-navigation")?.querySelector(".smart-toc-toggle") ||
-                            popup.closest(".smart-toc-inline")?.querySelector(".smart-toc-inline-toggle");
+                            popup
+                                .closest(".smart-toc-navigation")
+                                ?.querySelector(".smart-toc-toggle") ||
+                            popup
+                                .closest(".smart-toc-inline")
+                                ?.querySelector(".smart-toc-inline-toggle");
                         if (toggleBtn) {
                             toggleBtn.setAttribute("aria-expanded", "false");
                         }
@@ -353,9 +366,7 @@
         initSmartSectionTOC();
         document
             .querySelectorAll(".smart-toc-toggle, .smart-toc-inline-toggle")
-            .forEach((button) =>
-                button.setAttribute("aria-expanded", "false"),
-            );
+            .forEach((button) => button.setAttribute("aria-expanded", "false"));
     }
 
     if (document.readyState === "loading") {
