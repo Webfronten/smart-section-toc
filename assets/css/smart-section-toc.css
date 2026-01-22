@@ -228,20 +228,27 @@
     }
 
     /* Mobile inline toggle placed inside content */
+    /* Default (collapsed) */
     .smart-toc-inline {
         display: block;
-        width: 80%;
+        width: 60%;
         max-height: 80vh;
         overflow-y: auto;
-        margin: 20px 20px 0 20px;
+        margin: 20px 20px 0 auto;
         position: sticky;
-        top: 80px;
+        top: 20px;
         z-index: 1000;
         border: 3px solid #143e6a;
         border-radius: 16px;
         background: #ffffff;
+        transition: width 0.25s ease;
         /* overflow: hidden; */
         /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); */
+    }
+
+    /* Expanded state */
+    .smart-toc-inline:has(.smart-toc-inline-toggle[aria-expanded="true"]) {
+        width: 80%;
     }
 
     .smart-toc-inline-toggle {
