@@ -246,6 +246,18 @@
         /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); */
     }
 
+    @media (max-width: 417px) {
+        .smart-toc-inline {
+            width: 56%;
+        }
+    }
+
+    @media (max-width: 373px) {
+        .smart-toc-inline {
+            width: 60%;
+        }
+    }
+
     /* Expanded state */
     .smart-toc-inline:has(.smart-toc-inline-toggle[aria-expanded="true"]) {
         width: 80%;
@@ -261,7 +273,7 @@
         color: #333;
         border: 3px solid #333;
         border-radius: 14px;
-        padding: 10px 14px;
+        padding: 10px 12px;
         font-size: 18px;
         font-weight: 700;
         line-height: 1.3;
