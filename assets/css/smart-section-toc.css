@@ -231,7 +231,7 @@
     /* Default (collapsed) */
     .smart-toc-inline {
         display: block;
-        width: 56%;
+        width: 50%;
         max-height: 80vh;
         overflow-y: auto;
         margin: 20px 20px 0 auto;
@@ -244,6 +244,18 @@
         transition: width 0.25s ease;
         /* overflow: hidden; */
         /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); */
+    }
+
+    @media (max-width: 417px) {
+        .smart-toc-inline {
+            width: 56%;
+        }
+    }
+
+    @media (max-width: 373px) {
+        .smart-toc-inline {
+            width: 60%;
+        }
     }
 
     /* Expanded state */
