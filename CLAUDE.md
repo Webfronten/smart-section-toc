@@ -13,6 +13,30 @@ PHP: 8.4+
 Dependencies: ACF Pro, Admin Columns Pro
 Main plugin file: smart-section-toc.php
 
+# Commands
+
+There is no build step. CSS and JS in `assets/` are plain files edited directly.
+Releases are built automatically by `.github/workflows/release.yml` when a version tag is pushed.
+
+# Architecture
+
+## Main plugin file
+
+`smart-section-toc.php` contains a `Smart_Section_TOC` singleton class — this predates the procedural rule and is considered legacy infrastructure. Do not extend it. New functionality goes in standalone procedural includes.
+
+Asset loading is conditional: CSS/JS enqueue only when the `[smart_section_toc]` shortcode is present on the page, or when the page contains H2 headings (detected via `smart_section_toc_intelligent_loading()`).
+
+## Available filters
+
+- `smart_section_toc_content_selector` — CSS selector for the content area (default: `.site-content`)
+- `smart_section_toc_heading_selector` — heading tag to detect (default: `h2`)
+- `smart_section_toc_scroll_offset` — scroll offset in px (default: `80`)
+- `smart_section_toc_min_headings` — minimum heading count before TOC renders (default: `1`)
+
+## Third-party code
+
+`includes/plugin-update-checker/` is the Yahnis Elsts Plugin Update Checker library. Do not modify it.
+
 # Architecture and boilerplate
 
 This plugin was originally scaffolded with WordPress Plugin Boilerplate (wppb.me).

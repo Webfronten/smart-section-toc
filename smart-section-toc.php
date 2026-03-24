@@ -5,8 +5,8 @@
  * Plugin URI: https://www.webfronten.dk
  * Description: Automatically generates a dynamic table of contents from H2 headings with smooth scrolling and active section highlighting.
  * Version: 1.0.54
- * Requires at least: 6.8
- * Requires PHP: 8.2
+ * Requires at least: 6.9
+ * Requires PHP: 8.4
  * Author: Webfronten ApS
  * Author URI: https://www.webfronten.dk
  * License: GPLv2 or later

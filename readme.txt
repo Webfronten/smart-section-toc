@@ -2,11 +2,11 @@
 Contributors: webfronten
 Donate link: https://www.webfronten.dk
 Tags: table of contents, toc, navigation, smooth scroll, accessibility
-Requires at least: 6.8
-Tested up to: 6.7
+Requires at least: 6.9
+Tested up to: 6.9
 Version: 1.0.54
 Stable tag: 1.0.0
-Requires PHP: 8.2
+Requires PHP: 8.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -269,8 +269,8 @@ Initial release of Smart Section TOC. No upgrade necessary.
 == Additional Information ==
 
 **Requirements:**
-* WordPress 6.8 or higher
-* PHP 8.2 or higher
+* WordPress 6.9 or higher
+* PHP 8.4 or higher
 * Modern browser with JavaScript enabled
 
 **Browser Support:**
