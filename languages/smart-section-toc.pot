@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-24T11:55:55+00:00\n"
+"POT-Creation-Date: 2026-03-24T12:19:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: smart-section-toc\n"
@@ -57,48 +57,46 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: smart-section-toc.php:375
+#: smart-section-toc.php:373
 msgid "Smart Section TOC Instructions"
 msgstr ""
 
-#: smart-section-toc.php:376
+#: smart-section-toc.php:374
 msgid "This plugin automatically generates a table of contents based on the H2 headings inside a selected content area."
 msgstr ""
 
-#: smart-section-toc.php:378
+#: smart-section-toc.php:376
 msgid "Shortcode"
 msgstr ""
 
-#: smart-section-toc.php:381
+#: smart-section-toc.php:379
 msgid "Content container class"
 msgstr ""
 
-#: smart-section-toc.php:384
+#: smart-section-toc.php:382
 msgid "This CSS selector determines which part of your content is scanned for headings."
 msgstr ""
 
-#: smart-section-toc.php:385
+#: smart-section-toc.php:383
 msgid "You can change it using the following filter:"
 msgstr ""
 
-#: smart-section-toc.php:391
+#: smart-section-toc.php:389
 msgid "Heading levels"
 msgstr ""
 
-#: smart-section-toc.php:394
+#: smart-section-toc.php:392
 msgid "Defines which heading tags are included. Default is H2."
 msgstr ""
 
-#: smart-section-toc.php:395
+#: smart-section-toc.php:393
 msgid "To include H3 as well, use this filter:"
 msgstr ""
 
-#: smart-section-toc.php:401
+#: smart-section-toc.php:399
 msgid "Need help?"
 msgstr ""
 
-#. translators: %s: URL to the plugin website
-#: smart-section-toc.php:405
-#, php-format
-msgid "Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">plugin website</a> for more information."
+#: smart-section-toc.php:401
+msgid "Visit the plugin website for more information."
 msgstr ""

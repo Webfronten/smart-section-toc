@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Smart Section TOC 1.0.54\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/smart-section-"
 "toc\n"
-"POT-Creation-Date: 2026-03-24T11:55:55+00:00\n"
-"PO-Revision-Date: 2026-03-24 13:05+0100\n"
+"POT-Creation-Date: 2026-03-24T12:19:00+00:00\n"
+"PO-Revision-Date: 2026-03-24 13:20+0100\n"
 "Last-Translator: Torben Heikel Vinther <torben@webfronten.dk>\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -33,8 +33,8 @@ msgid ""
 "Automatically generates a dynamic table of contents from H2 headings with "
 "smooth scrolling and active section highlighting."
 msgstr ""
-"Genererer automatisk et dynamisk indholdsfortegnelse ud fra H2-"
-"overskrifter med jævn rulning og markering af den aktuelle sektion."
+"Genererer automatisk et dynamisk indholdsfortegnelse ud fra H2-overskrifter "
+"med jævn rulning og markering af den aktuelle sektion."
 
 #. Author of the plugin
 #: smart-section-toc.php
@@ -61,11 +61,11 @@ msgstr "Indstillinger for Smart Section TOC"
 msgid "Settings"
 msgstr "Indstillinger"
 
-#: smart-section-toc.php:375
+#: smart-section-toc.php:373
 msgid "Smart Section TOC Instructions"
 msgstr "Vejledning for Smart Section TOC"
 
-#: smart-section-toc.php:376
+#: smart-section-toc.php:374
 msgid ""
 "This plugin automatically generates a table of contents based on the H2 "
 "headings inside a selected content area."
@@ -73,50 +73,44 @@ msgstr ""
 "Dette plugin genererer automatisk en indholdsfortegnelse baseret på H2-"
 "overskrifterne i et valgt indholdsområde."
 
-#: smart-section-toc.php:378
+#: smart-section-toc.php:376
 msgid "Shortcode"
 msgstr "Shortcode"
 
-#: smart-section-toc.php:381
+#: smart-section-toc.php:379
 msgid "Content container class"
 msgstr "Klasse til indholdsbeholder"
 
-#: smart-section-toc.php:384
+#: smart-section-toc.php:382
 msgid ""
 "This CSS selector determines which part of your content is scanned for "
 "headings."
 msgstr ""
-"Denne CSS-selektor bestemmer, hvilken del af dit indhold der gennemsøges "
-"for overskrifter."
+"Denne CSS-selektor bestemmer, hvilken del af dit indhold der gennemsøges for "
+"overskrifter."
 
-#: smart-section-toc.php:385
+#: smart-section-toc.php:383
 msgid "You can change it using the following filter:"
 msgstr "Du kan ændre det ved hjælp af følgende filter:"
 
-#: smart-section-toc.php:391
+#: smart-section-toc.php:389
 msgid "Heading levels"
 msgstr "Overskriftsniveauer"
 
-#: smart-section-toc.php:394
+#: smart-section-toc.php:392
 msgid "Defines which heading tags are included. Default is H2."
 msgstr ""
-"Angiver, hvilke overskriftskoder der skal medtages. Standardindstillingen "
-"er H2."
+"Angiver, hvilke overskriftskoder der skal medtages. Standardindstillingen er "
+"H2."
 
-#: smart-section-toc.php:395
+#: smart-section-toc.php:393
 msgid "To include H3 as well, use this filter:"
 msgstr "Hvis du også vil medtage H3, skal du bruge dette filter:"
 
-#: smart-section-toc.php:401
+#: smart-section-toc.php:399
 msgid "Need help?"
 msgstr "Brug for hjælp?"
 
-#. translators: %s: URL to the plugin website
-#: smart-section-toc.php:405
-#, php-format
-msgid ""
-"Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener "
-"noreferrer\">plugin website</a> for more information."
-msgstr ""
-"Besøg <a href=\"%s\" target=\"_blank\" rel=\"noopener "
-"noreferrer\">pluginets websted</a> for at få mere at vide."
+#: smart-section-toc.php:401
+msgid "Visit the plugin website for more information."
+msgstr "Besøg pluginets hjemmeside for at få mere at vide."

@@ -358,8 +358,6 @@ class Smart_Section_TOC
         $plugin_links = array(
             '<a href="' . esc_url(admin_url('options-general.php?page=smart-section-toc')) . '">' .
                 esc_html__('Settings', 'smart-section-toc') . '</a>',
-            // '<a href="https://www.webfronten.dk" target="_blank" rel="noopener noreferrer">' .
-            //     esc_html__('Documentation', 'smart-section-toc') . '</a>',
         );
 
         return array_merge($plugin_links, $links);
@@ -400,11 +398,7 @@ class Smart_Section_TOC
 
             <h2><?php esc_html_e('Need help?', 'smart-section-toc'); ?></h2>
             <p>
-                <?php printf(
-                    /* translators: %s: URL to the plugin website */
-                    __('Visit the <a href="%s" target="_blank" rel="noopener noreferrer">plugin website</a> for more information.', 'smart-section-toc'),
-                    esc_url('https://www.webfronten.dk')
-                ); ?>
+                <a href="<?php echo esc_url('https://www.webfronten.dk'); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Visit the plugin website for more information.', 'smart-section-toc'); ?></a>
             </p>
         </div>
 <?php
