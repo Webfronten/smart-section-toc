@@ -4,8 +4,8 @@ Donate link: https://www.webfronten.dk
 Tags: table of contents, toc, navigation, smooth scroll, accessibility
 Requires at least: 6.9
 Tested up to: 6.9
-Version: 1.0.54
-Stable tag: 1.0.54
+Version: 1.0.55
+Stable tag: 1.0.55
 Requires PHP: 8.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -106,6 +106,11 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 5. Accessibility features in action
 
 == Changelog ==
+
+= 1.0.55 - 2026-03-24 =
+* Updated minimum requirements to WordPress 6.9 and PHP 8.4.
+* Auto-scroll TOC container to keep active item in view.
+* Fixed asset loading and output escaping.
 
 = 1.0.54 - 2026-01-23 =
 * Adjusting smart-toc-inline for smaller devices.
