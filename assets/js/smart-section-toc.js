@@ -140,7 +140,30 @@
             toActivate.forEach((link) => {
                 link.classList.add("active");
                 link.setAttribute("aria-current", "true");
+                scrollTocToActiveLink(link);
             });
+        }
+
+        // 'center' when triggered by a click, 'nearest' during passive scroll.
+        let tocScrollBehavior = 'nearest';
+
+        /**
+         * Scrolls the TOC container so the active link is visible.
+         * Uses block:"center" on click (shows context above/below) and
+         * block:"nearest" during passive scroll (no movement if already visible).
+         *
+         * @param {Element} link The newly activated .smart-toc-link element.
+         */
+        function scrollTocToActiveLink(link) {
+            const container = link.closest('.smart-toc-navigation');
+            if (!container) return;
+            const list = container.querySelector('.smart-toc-list');
+            const firstItem = list ? list.querySelector('.smart-toc-link') : null;
+            if (firstItem && link === firstItem) {
+                container.scrollTop = 0;
+            } else {
+                link.scrollIntoView({ block: tocScrollBehavior, inline: 'nearest' });
+            }
         }
 
         // Smooth scroll
@@ -174,8 +197,10 @@
                         ignoreObserver = false;
                     }, 1000); // 1000ms = long enough for scroll to settle
 
+                    tocScrollBehavior = 'center';
                     smoothScrollTo(targetElement, this);
                     setActiveLinksById(targetId);
+                    tocScrollBehavior = 'nearest';
                 }
 
                 // Luk popup hvis linket blev klikket inde i popup'en
