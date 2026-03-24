@@ -331,7 +331,9 @@ class Smart_Section_TOC
     }
 
     /**
-     * Add admin menu item under Settings
+     * Add admin menu item under Settings.
+     *
+     * @return void
      */
     public function add_admin_menu(): void
     {
@@ -364,7 +366,9 @@ class Smart_Section_TOC
     }
 
     /**
-     * Render the plugin's settings/instructions page
+     * Render the plugin's settings/instructions page.
+     *
+     * @return void
      */
     public function render_settings_page(): void
     {
