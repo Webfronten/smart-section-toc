@@ -18,6 +18,26 @@ Main plugin file: smart-section-toc.php
 There is no build step. CSS and JS in `assets/` are plain files edited directly.
 Releases are built automatically by `.github/workflows/release.yml` when a version tag is pushed.
 
+## Translation
+
+Text domain: `smart-section-toc`. Danish (da_DK) translation is included in `languages/`.
+Textdomain is loaded on `init` (required since WP 6.7).
+
+Translation files: `languages/smart-section-toc.pot` (source), `languages/smart-section-toc-da_DK.po` and `.mo` (compiled).
+No `.l10n.php` — Poedit does not generate it; WordPress works fine without it.
+
+### Updating translations
+
+1. Regenerate the POT file after adding new strings (run from plugin root):
+   ```
+   /Applications/Local.app/Contents/Resources/extraResources/bin/wp-cli/wp-cli.phar i18n make-pot . languages/smart-section-toc.pot --exclude=vendor,node_modules
+   ```
+   Do not use the global `wp` binary — it is outdated and incompatible with PHP 8.4.
+2. Open `languages/smart-section-toc-da_DK.po` in Poedit → **Translate → Update from POT file**
+3. Translate new strings (use Poedit's DeepL integration, then review)
+4. Save — Poedit compiles `.mo` automatically
+5. Commit `smart-section-toc.pot`, `smart-section-toc-da_DK.po`, and `smart-section-toc-da_DK.mo`
+
 # Architecture
 
 ## Main plugin file

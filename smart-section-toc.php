@@ -401,6 +401,7 @@ class Smart_Section_TOC
             <h2><?php esc_html_e('Need help?', 'smart-section-toc'); ?></h2>
             <p>
                 <?php printf(
+                    /* translators: %s: URL to the plugin website */
                     __('Visit the <a href="%s" target="_blank" rel="noopener noreferrer">plugin website</a> for more information.', 'smart-section-toc'),
                     esc_url('https://www.webfronten.dk')
                 ); ?>
