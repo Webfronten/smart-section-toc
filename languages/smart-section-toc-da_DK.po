@@ -1,87 +1,71 @@
+# Copyright (C) 2026 Webfronten ApS
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Section TOC\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-23 10:05+0000\n"
-"PO-Revision-Date: 2025-08-16 10:39+0000\n"
+"Project-Id-Version: Smart Section TOC 1.0.54\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/smart-section-"
+"toc\n"
+"POT-Creation-Date: 2026-03-24T12:19:00+00:00\n"
+"PO-Revision-Date: 2026-03-24 13:20+0100\n"
 "Last-Translator: Torben Heikel Vinther <torben@webfronten.dk>\n"
-"Language-Team: Dansk\n"
+"Language-Team: \n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.2.27\n"
+"X-Generator: Poedit 3.9\n"
 "X-Domain: smart-section-toc\n"
 
+#. Plugin Name of the plugin
+#: smart-section-toc.php smart-section-toc.php:340
+msgid "Smart Section TOC"
+msgstr "Smart Section TOC"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: smart-section-toc.php
+msgid "https://www.webfronten.dk"
+msgstr "https://www.webfronten.dk"
+
 #. Description of the plugin
+#: smart-section-toc.php
 msgid ""
 "Automatically generates a dynamic table of contents from H2 headings with "
 "smooth scrolling and active section highlighting."
 msgstr ""
-"Genererer automatisk en dynamisk indholdsfortegnelse ud fra H2-overskrifter "
-"med jævn rulning og aktiv fremhævelse af afsnit."
+"Genererer automatisk et dynamisk indholdsfortegnelse ud fra H2-overskrifter "
+"med jævn rulning og markering af den aktuelle sektion."
 
-#: smart-section-toc.php:316
-msgid "Content container class"
-msgstr "Klasse for indholdscontainer"
+#. Author of the plugin
+#: smart-section-toc.php
+msgid "Webfronten ApS"
+msgstr "Webfronten ApS"
 
-#: smart-section-toc.php:173
+#: smart-section-toc.php:168 smart-section-toc.php:220
 msgid "Content on the site"
 msgstr "Indhold på siden"
 
-#: smart-section-toc.php:329
-msgid "Defines which heading tags are included. Default is H2."
-msgstr "Definerer, hvilke overskriftskoder der medtages. Standard er H2."
+#: smart-section-toc.php:202
+msgid "Open table of contents"
+msgstr "Vis indholdsfortegnelse"
 
-#: smart-section-toc.php:262
+#: smart-section-toc.php:327
 msgid "Go to section:"
 msgstr "Gå til sektion:"
 
-#: smart-section-toc.php:326
-msgid "Heading levels"
-msgstr "Overskriftsniveauer"
-
-#. URI of the plugin
-#. Author URI of the plugin
-msgid "https://www.webfronten.dk"
-msgstr "https://www.webfronten.dk"
-
-#: smart-section-toc.php:336
-msgid "Need help?"
-msgstr "Brug for hjælp?"
-
-#: smart-section-toc.php:295
-msgid "Settings"
-msgstr "Indstillinger"
-
-#: smart-section-toc.php:313
-msgid "Shortcode"
-msgstr "Shortcode"
-
-#. Name of the plugin
-#: smart-section-toc.php:275
-msgid "Smart Section TOC"
-msgstr "Smart Section TOC"
-
-#: smart-section-toc.php:310
-msgid "Smart Section TOC Instructions"
-msgstr "Instruktioner til Smart Section TOC"
-
-#: smart-section-toc.php:274
+#: smart-section-toc.php:339
 msgid "Smart Section TOC Settings"
 msgstr "Indstillinger for Smart Section TOC"
 
-#: smart-section-toc.php:319
-msgid ""
-"This CSS selector determines which part of your content is scanned for "
-"headings."
-msgstr ""
-"Denne CSS-vælger bestemmer, hvilken del af dit indhold der skal scannes for "
-"overskrifter."
+#: smart-section-toc.php:360
+msgid "Settings"
+msgstr "Indstillinger"
 
-#: smart-section-toc.php:311
+#: smart-section-toc.php:373
+msgid "Smart Section TOC Instructions"
+msgstr "Vejledning for Smart Section TOC"
+
+#: smart-section-toc.php:374
 msgid ""
 "This plugin automatically generates a table of contents based on the H2 "
 "headings inside a selected content area."
@@ -89,23 +73,44 @@ msgstr ""
 "Dette plugin genererer automatisk en indholdsfortegnelse baseret på H2-"
 "overskrifterne i et valgt indholdsområde."
 
-#: smart-section-toc.php:330
-msgid "To include H3 as well, use this filter:"
-msgstr "Brug dette filter for også at inkludere H3:"
+#: smart-section-toc.php:376
+msgid "Shortcode"
+msgstr "Shortcode"
 
-#: smart-section-toc.php:339
-#, php-format
+#: smart-section-toc.php:379
+msgid "Content container class"
+msgstr "Klasse til indholdsbeholder"
+
+#: smart-section-toc.php:382
 msgid ""
-"Visit the <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">"
-"plugin website</a> for more information."
+"This CSS selector determines which part of your content is scanned for "
+"headings."
 msgstr ""
-"Besøg <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">plugin-"
-"hjemmesiden</a> for mere information."
+"Denne CSS-selektor bestemmer, hvilken del af dit indhold der gennemsøges for "
+"overskrifter."
 
-#. Author of the plugin
-msgid "Webfronten ApS"
-msgstr "Webfronten ApS"
-
-#: smart-section-toc.php:320
+#: smart-section-toc.php:383
 msgid "You can change it using the following filter:"
 msgstr "Du kan ændre det ved hjælp af følgende filter:"
+
+#: smart-section-toc.php:389
+msgid "Heading levels"
+msgstr "Overskriftsniveauer"
+
+#: smart-section-toc.php:392
+msgid "Defines which heading tags are included. Default is H2."
+msgstr ""
+"Angiver, hvilke overskriftskoder der skal medtages. Standardindstillingen er "
+"H2."
+
+#: smart-section-toc.php:393
+msgid "To include H3 as well, use this filter:"
+msgstr "Hvis du også vil medtage H3, skal du bruge dette filter:"
+
+#: smart-section-toc.php:399
+msgid "Need help?"
+msgstr "Brug for hjælp?"
+
+#: smart-section-toc.php:401
+msgid "Visit the plugin website for more information."
+msgstr "Besøg pluginets hjemmeside for at få mere at vide."
