@@ -184,7 +184,7 @@ class Smart_Section_TOC
             <span aria-hidden="true" class="smart-toc-toggle__dot"></span>
         </button>
 
-        <!-- Popup til mobil -->
+        <!-- Mobile popup -->
         <div class="smart-toc-popup" role="dialog" aria-modal="true" aria-label="%2$s">
             <h3>%2$s</h3>
             <nav id="smart-article-toc-mobile" aria-label="%2$s">
@@ -263,22 +263,24 @@ class Smart_Section_TOC
      */
     public function maybe_enqueue_assets(): void
     {
-        // Debug: Force load on specific page for testing
-        if (is_page(11906)) { // Your page ID
-            $this->enqueue_assets_files();
-            return;
-        }
-
         // First check: if render_shortcode was called, we know we need assets
         if ($this->enqueue_assets) {
             $this->enqueue_assets_files();
             return;
         }
 
-        // Second check: look for shortcode in post content
+        // Second check: look for shortcode or H2 headings in post content
         if (is_singular()) {
             global $post;
-            if ($post && has_shortcode($post->post_content, 'smart_section_toc')) {
+            if (!$post) {
+                return;
+            }
+            $content = $post->post_content;
+            if (
+                has_shortcode($content, 'smart_section_toc') ||
+                has_shortcode($content, 'smart_section_toc_mobile_button') ||
+                substr_count($content, '<h2') >= 1
+            ) {
                 $this->enqueue_assets_files();
             }
         }
@@ -370,33 +372,33 @@ class Smart_Section_TOC
     {
 ?>
         <div class="wrap">
-            <h1><?php _e('Smart Section TOC Instructions', 'smart-section-toc'); ?></h1>
-            <p><?php _e('This plugin automatically generates a table of contents based on the H2 headings inside a selected content area.', 'smart-section-toc'); ?></p>
+            <h1><?php esc_html_e('Smart Section TOC Instructions', 'smart-section-toc'); ?></h1>
+            <p><?php esc_html_e('This plugin automatically generates a table of contents based on the H2 headings inside a selected content area.', 'smart-section-toc'); ?></p>
 
-            <h2><?php _e('Shortcode', 'smart-section-toc'); ?></h2>
+            <h2><?php esc_html_e('Shortcode', 'smart-section-toc'); ?></h2>
             <p><code>[smart_section_toc]</code></p>
 
-            <h2><?php _e('Content container class', 'smart-section-toc'); ?></h2>
+            <h2><?php esc_html_e('Content container class', 'smart-section-toc'); ?></h2>
             <p>
                 <code><?php echo esc_html(apply_filters('smart_section_toc_content_selector', '.site-content')); ?></code><br>
-                <?php _e('This CSS selector determines which part of your content is scanned for headings.', 'smart-section-toc'); ?><br>
-                <?php _e('You can change it using the following filter:', 'smart-section-toc'); ?>
+                <?php esc_html_e('This CSS selector determines which part of your content is scanned for headings.', 'smart-section-toc'); ?><br>
+                <?php esc_html_e('You can change it using the following filter:', 'smart-section-toc'); ?>
             </p>
             <pre><code>add_filter( 'smart_section_toc_content_selector', function() {
     return '.your-custom-class';
 });</code></pre>
 
-            <h2><?php _e('Heading levels', 'smart-section-toc'); ?></h2>
+            <h2><?php esc_html_e('Heading levels', 'smart-section-toc'); ?></h2>
             <p>
                 <code><?php echo esc_html(apply_filters('smart_section_toc_heading_selector', 'h2')); ?></code><br>
-                <?php _e('Defines which heading tags are included. Default is H2.', 'smart-section-toc'); ?><br>
-                <?php _e('To include H3 as well, use this filter:', 'smart-section-toc'); ?>
+                <?php esc_html_e('Defines which heading tags are included. Default is H2.', 'smart-section-toc'); ?><br>
+                <?php esc_html_e('To include H3 as well, use this filter:', 'smart-section-toc'); ?>
             </p>
             <pre><code>add_filter( 'smart_section_toc_heading_selector', function() {
     return 'h2, h3';
 });</code></pre>
 
-            <h2><?php _e('Need help?', 'smart-section-toc'); ?></h2>
+            <h2><?php esc_html_e('Need help?', 'smart-section-toc'); ?></h2>
             <p>
                 <?php printf(
                     __('Visit the <a href="%s" target="_blank" rel="noopener noreferrer">plugin website</a> for more information.', 'smart-section-toc'),
@@ -408,119 +410,6 @@ class Smart_Section_TOC
     }
 }
 
-/**
- * Smart Section TOC - Force vis altid når shortcode er til stede
- */
-function smart_section_toc_intelligent_loading()
-{
-    if (is_admin()) return;
-
-    global $post;
-    if (!$post) return;
-
-    $content = $post->post_content;
-    $h2_count = substr_count($content, '<h2');
-    $has_mobile_button = (
-        has_shortcode($content, 'smart_section_toc_mobile_button') ||
-        strpos($content, '[smart_section_toc_mobile_button]') !== false
-    );
-    $has_shortcode = (
-        has_shortcode($content, 'smart_section_toc') ||
-        strpos($content, '[smart_section_toc]') !== false ||
-        strpos($content, 'smart-section-toc') !== false ||
-        $has_mobile_button
-    );
-
-    // Load assets if shortcode is present OR 1 or more H2 headings
-    if ($has_shortcode || $h2_count >= 1) {
-        wp_enqueue_style(
-            'smart-section-toc-css',
-            plugins_url('assets/css/smart-section-toc.css', __FILE__),
-            array(),
-            '1.0.20'
-        );
-
-        wp_enqueue_script(
-            'smart-section-toc-js',
-            plugins_url('assets/js/smart-section-toc.js', __FILE__),
-            array(),
-            '1.0.20',
-            true
-        );
-
-        // Settings object - FORCE vis hvis shortcode er til stede
-        wp_add_inline_script(
-            'smart-section-toc-js',
-            'var smartSectionTOC = {
-                "contentSelector": "' . apply_filters('smart_section_toc_content_selector', '.site-content') . '",
-                "headingSelector": "' . apply_filters('smart_section_toc_heading_selector', 'h2') . '",
-                "scrollOffset": "' . apply_filters('smart_section_toc_scroll_offset', '80') . '",
-                "minHeadings": 1,
-                "forceShow": true,
-                "hasShortcode": ' . ($has_shortcode ? 'true' : 'false') . ',
-                "strings": {"goToSection": "Gå til sektion:", "noHeadings": "Ingen overskrifter fundet"}
-            };',
-            'before'
-        );
-
-        // KRITISK: Force JavaScript override
-        if ($has_shortcode) {
-            wp_add_inline_script(
-                'smart-section-toc-js',
-                '
-                // Override TOC generation efter DOM load
-                document.addEventListener("DOMContentLoaded", function() {
-                    setTimeout(function() {
-                        var tocContainer = document.querySelector(".smart-section-toc");
-                        if (tocContainer && (!tocContainer.innerHTML || tocContainer.innerHTML.trim() === "")) {
-                            console.log("Smart TOC: Forcing TOC generation for shortcode");
-
-                            // Find headings
-                            var siteContent = document.querySelector(".site-content") || document.body;
-                            var headings = siteContent.querySelectorAll("h2");
-
-                            console.log("Smart TOC: Found " + headings.length + " headings");
-
-                            if (headings.length >= 1) {
-                                // Generate TOC selv med få headings
-                                var tocHTML = "<nav class=\"smart-toc-nav\" aria-label=\"Table of Contents\">";
-                                tocHTML += "<h3 class=\"smart-toc-title\">Table of Contents</h3>";
-                                tocHTML += "<ul class=\"smart-toc-list\">";
-
-                                headings.forEach(function(heading, index) {
-                                    if (!heading.id) {
-                                        heading.id = "heading-" + index;
-                                    }
-                                    tocHTML += "<li class=\"smart-toc-item\">";
-                                    tocHTML += "<a href=\"#" + heading.id + "\" class=\"smart-toc-link\">" + heading.textContent + "</a>";
-                                    tocHTML += "</li>";
-                                });
-
-                                tocHTML += "</ul></nav>";
-                                tocContainer.innerHTML = tocHTML;
-
-                                console.log("Smart TOC: Generated TOC with " + headings.length + " items");
-                            } else {
-                                tocContainer.innerHTML = "<p>Ingen H2 overskrifter fundet</p>";
-                                console.log("Smart TOC: No headings found, showing message");
-                            }
-                        }
-                    }, 200);
-                });
-                ',
-                'after'
-            );
-        }
-
-        // Auto-add TOC container for content-rich pages without shortcode
-        if (!$has_shortcode && $h2_count >= 1) {
-            add_filter('the_content', function ($content) {
-                return '<div class="smart-section-toc"></div>' . $content;
-            }, 1);
-        }
-    }
-}
-add_action('wp_enqueue_scripts', 'smart_section_toc_intelligent_loading', 999);
 
 /**
  * Initialize the plugin
