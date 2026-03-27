@@ -29,10 +29,10 @@ No `.l10n.php` — Poedit does not generate it; WordPress works fine without it.
 ### Updating translations
 
 1. Regenerate the POT file after adding new strings (run from plugin root):
-   ```
-   /Applications/Local.app/Contents/Resources/extraResources/bin/wp-cli/wp-cli.phar i18n make-pot . languages/smart-section-toc.pot --exclude=vendor,node_modules
-   ```
-   Do not use the global `wp` binary — it is outdated and incompatible with PHP 8.4.
+    ```
+    /Applications/Local.app/Contents/Resources/extraResources/bin/wp-cli/wp-cli.phar i18n make-pot . languages/smart-section-toc.pot --exclude=vendor,node_modules
+    ```
+    Do not use the global `wp` binary — it is outdated and incompatible with PHP 8.4.
 2. Open `languages/smart-section-toc-da_DK.po` in Poedit → **Translate → Update from POT file**
 3. Translate new strings (use Poedit's DeepL integration, then review)
 4. Save — Poedit compiles `.mo` automatically
@@ -91,6 +91,17 @@ They serve as infrastructure glue and are only refactored in dedicated tasks.
 - Use \_\_() and \_e() for all user-facing strings
 - No <?php headers in output
 - English-only inline comments
+
+## ACF conventions
+
+- Never output via `the_field()` or `the_sub_field()` — both escape HTML automatically since ACF 6.2.7.
+  Use `get_field()` / `get_sub_field()` and choose an explicit escape strategy at the output layer
+  (e.g. `esc_html()`, `wp_kses_post()`, or raw `echo` only when the value is already trusted).
+- ACF AJAX queries now enforce the field's configured role and post status restrictions (since 6.7.1).
+  If a User, Post Object, or Relationship field returns empty results unexpectedly, check the field's
+  own Query settings before debugging code.
+- Declare all properties explicitly in classes that extend ACF classes — dynamic class properties
+  are incompatible with PHP 8.2+ and ACF itself fixed this in 6.5.0.
 
 # PHPDoc
 
