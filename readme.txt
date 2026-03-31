@@ -4,8 +4,8 @@ Donate link: https://www.webfronten.dk
 Tags: table of contents, toc, navigation, smooth scroll, accessibility
 Requires at least: 6.9
 Tested up to: 6.9
-Version: 1.0.55
-Stable tag: 1.0.56
+Version: 1.0.57
+Stable tag: 1.0.57
 Requires PHP: 8.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -106,6 +106,10 @@ Yes! The plugin uses semantic CSS classes that you can target in your theme's st
 5. Accessibility features in action
 
 == Changelog ==
+
+= 1.0.57 - 2026-03-31 =
+* Fixed active TOC link being hidden behind scroll-hint overlay after navigation.
+* Reduced TOC container padding when scroll-hint is visible to signal overflow.
 
 = 1.0.56 - 2026-03-31 =
 * Fixed TOC auto-scroll to use container-only scrolling, preventing interference with external scroll components.
