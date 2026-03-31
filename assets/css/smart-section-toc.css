@@ -440,3 +440,66 @@
     color: var(--toc-active-color);
     font-weight: 700;
 }
+
+/* Scroll-hint button — shown when TOC content overflows the container */
+/* Button is appended to <body> and positioned via JS (fixed) so it is not
+   clipped by the TOC container's overflow:auto. Left/bottom/width are set
+   dynamically to align with the container's bounding rect. */
+.smart-toc-scroll-hint {
+    display: none;
+    position: fixed;
+    box-sizing: border-box;
+    padding: 24px 0 8px;
+    border: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--toc-bg, #fff) 55%
+    );
+    color: var(--toc-text-color, #333);
+    cursor: pointer;
+    text-align: center;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.smart-toc-scroll-hint.is-visible {
+    display: block;
+    pointer-events: auto;
+}
+
+.smart-toc-scroll-hint:hover,
+.smart-toc-scroll-hint:focus,
+.smart-toc-scroll-hint:active {
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--toc-bg, #fff) 55%
+    );
+    outline: none;
+    box-shadow: none;
+    color: var(--toc-text-color, #333);
+}
+
+.smart-toc-scroll-hint svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .smart-toc-scroll-hint.is-visible svg {
+        animation: smart-toc-bounce 1.4s ease-in-out infinite;
+    }
+
+    @keyframes smart-toc-bounce {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(3px); }
+    }
+}
+
+/* No scroll-hint on breakpoints where max-height is removed */
+@media (max-width: 1024px) {
+    .smart-toc-scroll-hint {
+        display: none !important;
+    }
+}

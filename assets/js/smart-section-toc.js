@@ -128,6 +128,111 @@
             tocLists.forEach((list) => list.appendChild(li.cloneNode(true)));
         });
 
+        // Inject scroll-hint button into the desktop TOC container only.
+        // The popup container is excluded because it handles its own overflow.
+        const desktopNav = document.querySelector('nav#smart-article-toc-desktop');
+        const desktopContainer = desktopNav ? desktopNav.closest('.smart-toc-navigation') : null;
+        if (desktopContainer) {
+            initScrollHint(desktopContainer);
+        }
+
+        /**
+         * Injects a scroll-hint chevron button as a fixed-positioned overlay
+         * at the bottom of the TOC container. Using fixed positioning avoids
+         * clipping by the container's own overflow:auto.
+         *
+         * @param {Element} container The .smart-toc-navigation element.
+         */
+        function initScrollHint(container) {
+            const SCROLL_THRESHOLD = 10;
+            const SCROLL_STEP = 150;
+
+            const hint = document.createElement('button');
+            hint.className = 'smart-toc-scroll-hint';
+            hint.setAttribute('aria-label', 'Mere indhold');
+            hint.setAttribute('type', 'button');
+            hint.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" ' +
+                'viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+                'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" ' +
+                'aria-hidden="true" focusable="false">' +
+                '<polyline points="6 9 12 15 18 9"></polyline>' +
+                '</svg>';
+
+            // Append to body so overflow:auto on the container does not clip it.
+            document.body.appendChild(hint);
+
+            // Resolve the actual background colour for the gradient.
+            // --toc-bg defaults to 'transparent', so we walk up the DOM to find
+            // the first ancestor with a non-transparent background colour.
+            const containerStyle = getComputedStyle(container);
+            const tocColor = containerStyle.getPropertyValue('--toc-text-color').trim() || containerStyle.color;
+            hint.style.setProperty('--toc-text-color', tocColor || '#333');
+
+            let resolvedBg = '';
+            let node = container;
+            while (node && node !== document.body.parentElement) {
+                const bg = getComputedStyle(node).backgroundColor;
+                if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+                    resolvedBg = bg;
+                    break;
+                }
+                node = node.parentElement;
+            }
+            hint.style.setProperty('--toc-bg', resolvedBg || '#fff');
+
+            /**
+             * Repositions the hint to align with the bottom of the TOC container.
+             */
+            function positionHint() {
+                const rect = container.getBoundingClientRect();
+                hint.style.left  = rect.left + 'px';
+                hint.style.bottom = ( window.innerHeight - rect.bottom ) + 'px';
+                hint.style.width  = rect.width + 'px';
+            }
+
+            /**
+             * Shows or hides the scroll-hint button based on available scroll room.
+             */
+            function updateHintVisibility() {
+                const remaining =
+                    container.scrollHeight -
+                    container.clientHeight -
+                    container.scrollTop;
+                if (remaining > SCROLL_THRESHOLD) {
+                    positionHint();
+                    hint.classList.add('is-visible');
+                } else {
+                    hint.classList.remove('is-visible');
+                }
+            }
+
+            // Scroll the container down when the hint is clicked.
+            hint.addEventListener('click', function (e) {
+                e.stopPropagation();
+                container.scrollBy({ top: SCROLL_STEP, behavior: 'smooth' });
+            });
+
+            // Keep visibility and position in sync on container scroll.
+            container.addEventListener('scroll', updateHintVisibility, { passive: true });
+
+            // Reposition on window scroll (container is sticky — its rect changes).
+            window.addEventListener('scroll', function () {
+                if (hint.classList.contains('is-visible')) {
+                    positionHint();
+                }
+            }, { passive: true });
+
+            // Keep visibility in sync when the container resizes (e.g. viewport change).
+            if (typeof ResizeObserver !== 'undefined') {
+                const ro = new ResizeObserver(updateHintVisibility);
+                ro.observe(container);
+            }
+
+            // Initial check.
+            updateHintVisibility();
+        }
+
         // NY HELPER: Aktivér alle matchende links (desktop + popup)
         function setActiveLinksById(headingId) {
             document.querySelectorAll(".smart-toc-link").forEach((link) => {
@@ -149,21 +254,41 @@
 
         /**
          * Scrolls the TOC container so the active link is visible.
-         * Uses block:"center" on click (shows context above/below) and
-         * block:"nearest" during passive scroll (no movement if already visible).
+         * Operates only on container.scrollTop — never touches window scroll position.
+         * This avoids interfering with external components (e.g. scroll indicators)
+         * that read window.pageYOffset as a reference point.
+         *
+         * Block 'nearest': only scrolls if the link is outside the visible area.
+         * Block 'center':  scrolls so the link is vertically centred in the container.
          *
          * @param {Element} link The newly activated .smart-toc-link element.
          */
         function scrollTocToActiveLink(link) {
             const container = link.closest('.smart-toc-navigation');
             if (!container) return;
-            const list = container.querySelector('.smart-toc-list');
-            const firstItem = list ? list.querySelector('.smart-toc-link') : null;
-            if (firstItem && link === firstItem) {
-                container.scrollTop = 0;
-            } else {
-                link.scrollIntoView({ block: tocScrollBehavior, inline: 'nearest' });
+
+            if (tocScrollBehavior === 'center') {
+                // Centre the link vertically inside the container.
+                container.scrollTop =
+                    link.offsetTop -
+                    ( container.clientHeight / 2 ) +
+                    ( link.offsetHeight / 2 );
+                return;
             }
+
+            // 'nearest': scroll only when the link is outside the visible area.
+            if (link.offsetTop < container.scrollTop) {
+                // Link is above the visible area — scroll up to reveal it.
+                container.scrollTop = link.offsetTop;
+            } else if (
+                link.offsetTop + link.offsetHeight >
+                container.scrollTop + container.clientHeight
+            ) {
+                // Link is below the visible area — scroll down to reveal it.
+                container.scrollTop =
+                    link.offsetTop + link.offsetHeight - container.clientHeight;
+            }
+            // If already visible, do nothing.
         }
 
         // Smooth scroll
