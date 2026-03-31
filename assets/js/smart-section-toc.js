@@ -202,8 +202,12 @@
                 if (remaining > SCROLL_THRESHOLD) {
                     positionHint();
                     hint.classList.add('is-visible');
+                    container.classList.add('has-scroll-hint');
+                    container.style.paddingBottom = '4px';
                 } else {
                     hint.classList.remove('is-visible');
+                    container.classList.remove('has-scroll-hint');
+                    container.style.paddingBottom = '';
                 }
             }
 
@@ -267,11 +271,17 @@
             const container = link.closest('.smart-toc-navigation');
             if (!container) return;
 
+            // When the scroll-hint overlay is visible it covers the bottom of the
+            // container. Subtract its height so the active link is not hidden behind it.
+            const hintEl = document.querySelector('.smart-toc-scroll-hint.is-visible');
+            const hintHeight = hintEl ? hintEl.offsetHeight : 0;
+            const visibleHeight = container.clientHeight - hintHeight;
+
             if (tocScrollBehavior === 'center') {
-                // Centre the link vertically inside the container.
+                // Centre the link vertically inside the visible area.
                 container.scrollTop =
                     link.offsetTop -
-                    ( container.clientHeight / 2 ) +
+                    ( visibleHeight / 2 ) +
                     ( link.offsetHeight / 2 );
                 return;
             }
@@ -282,11 +292,11 @@
                 container.scrollTop = link.offsetTop;
             } else if (
                 link.offsetTop + link.offsetHeight >
-                container.scrollTop + container.clientHeight
+                container.scrollTop + visibleHeight
             ) {
-                // Link is below the visible area — scroll down to reveal it.
+                // Link is below the visible area (or behind the hint) — scroll down.
                 container.scrollTop =
-                    link.offsetTop + link.offsetHeight - container.clientHeight;
+                    link.offsetTop + link.offsetHeight - visibleHeight;
             }
             // If already visible, do nothing.
         }
